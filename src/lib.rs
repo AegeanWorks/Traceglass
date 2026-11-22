@@ -37,6 +37,16 @@ pub fn parse_trace(text: &str) -> Result<Vec<Event>, String> {
         .collect()
 }
 
+/// Treat each UTF-8 line, including blank lines, as an event with a shared name.
+pub fn parse_lines(text: &str) -> Vec<Event> {
+    text.lines()
+        .map(|line| Event {
+            name: "line".to_owned(),
+            value: line.to_owned(),
+        })
+        .collect()
+}
+
 pub fn compare(left: &[Event], right: &[Event]) -> Option<Difference> {
     for (index, (a, b)) in left.iter().zip(right).enumerate() {
         if a != b {

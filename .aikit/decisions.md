@@ -60,3 +60,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: Programs should be able to pipe a trace directly into a non-interactive comparison.
 - **Decision**: Treat one bare dash operand as standard input only for check; reject two dashes before reading and use the existing bounded UTF-8 reader.
 - **Consequences**: A literal dash file in check is addressed as ./-; view still treats dash as a file because stdin is used for navigation. Exit codes and output formats are unchanged.
+
+### ADR-008: Explicit raw line input mode
+- **Date**: 2026-11-22
+- **Status**: Accepted
+- **Context**: Ordinary programmer logs are not necessarily tab-separated event records.
+- **Decision**: Add explicit --lines mode to view and check, parsing each UTF-8 line as an event named line using the existing bounded input adapter and alignment.
+- **Consequences**: Structured traces remain the default; raw lines preserve blanks but normalize line terminators, and repeated lines can have ambiguous optimal alignments. JSON and piped check input remain supported.

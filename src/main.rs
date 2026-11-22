@@ -1,7 +1,7 @@
 use std::io::{self, BufRead, Read, Write};
 use std::path::Path;
 use std::process::ExitCode;
-use traceglass::input::read_trace;
+use traceglass::input::{read_input, InputFormat};
 use traceglass::ui::{parse_action, render, summarize, summarize_json};
 use traceglass::{parse_trace, Comparison, Navigation};
 
@@ -22,7 +22,7 @@ fn main() -> ExitCode {
             }
         }
         [command, left, right] if command == "view" => {
-            match view(Path::new(left), Path::new(right)) {
+            match view(Path::new(left), Path::new(right), InputFormat::Structured) {
                 Ok(()) => ExitCode::SUCCESS,
                 Err(error) => {
                     eprintln!("Error: {error}");
@@ -30,27 +30,48 @@ fn main() -> ExitCode {
                 }
             }
         }
-        [command, left, right] if command == "check" => {
-            match check(Path::new(left), Path::new(right), false) {
-                Ok(false) => ExitCode::SUCCESS,
-                Ok(true) => ExitCode::from(1),
+        [command, flag, left, right] if command == "view" && flag == "--lines" => {
+            match view(Path::new(left), Path::new(right), InputFormat::Lines) {
+                Ok(()) => ExitCode::SUCCESS,
                 Err(error) => {
                     eprintln!("Error: {error}");
-                    ExitCode::from(2)
+                    ExitCode::FAILURE
                 }
             }
         }
-        [command, flag, left, right] if command == "check" && flag == "--json" => {
-            match check(Path::new(left), Path::new(right), true) {
-                Ok(false) => ExitCode::SUCCESS,
-                Ok(true) => ExitCode::from(1),
-                Err(error) => {
-                    eprintln!("Error: {error}");
-                    ExitCode::from(2)
-                }
-            }
+        [command, left, right] if command == "check" => run_check(
+            Path::new(left),
+            Path::new(right),
+            false,
+            InputFormat::Structured,
+        ),
+        [command, flag, left, right] if command == "check" && flag == "--json" => run_check(
+            Path::new(left),
+            Path::new(right),
+            true,
+            InputFormat::Structured,
+        ),
+        [command, flag, left, right] if command == "check" && flag == "--lines" => {
+            run_check(Path::new(left), Path::new(right), false, InputFormat::Lines)
+        }
+        [command, a, b, left, right]
+            if command == "check"
+                && ((a == "--json" && b == "--lines") || (a == "--lines" && b == "--json")) =>
+        {
+            run_check(Path::new(left), Path::new(right), true, InputFormat::Lines)
         }
         _ => usage(),
+    }
+}
+
+fn run_check(left: &Path, right: &Path, json: bool, format: InputFormat) -> ExitCode {
+    match check(left, right, json, format) {
+        Ok(false) => ExitCode::SUCCESS,
+        Ok(true) => ExitCode::from(1),
+        Err(error) => {
+            eprintln!("Error: {error}");
+            ExitCode::from(2)
+        }
     }
 }
 
@@ -66,11 +87,16 @@ fn demo(seed: u64) -> ExitCode {
 }
 
 fn usage() -> ExitCode {
-    eprintln!("Usage: traceglass view LEFT RIGHT | check [--json] LEFT RIGHT | inventory | demo --scripted [--seed N]");
+    eprintln!("Usage: traceglass view [--lines] LEFT RIGHT | check [--json] [--lines] LEFT RIGHT | inventory | demo --scripted [--seed N]");
     ExitCode::from(2)
 }
 
-fn load_comparison(left: &Path, right: &Path, allow_stdin: bool) -> Result<Comparison, String> {
+fn load_comparison(
+    left: &Path,
+    right: &Path,
+    allow_stdin: bool,
+    format: InputFormat,
+) -> Result<Comparison, String> {
     const MAX_BYTES: usize = 4 * 1024 * 1024;
     const MAX_CELLS: usize = 1_000_000;
     let is_stdin = |path: &Path| allow_stdin && path.as_os_str() == "-";
@@ -79,19 +105,19 @@ fn load_comparison(left: &Path, right: &Path, allow_stdin: bool) -> Result<Compa
     }
     let load = |path: &Path| {
         if is_stdin(path) {
-            return read_trace(io::stdin().lock(), MAX_BYTES)
+            return read_input(io::stdin().lock(), MAX_BYTES, format)
                 .map_err(|error| format!("standard input: {error}"));
         }
         let file =
             std::fs::File::open(path).map_err(|error| format!("cannot open {path:?}: {error}"))?;
-        read_trace(file, MAX_BYTES).map_err(|error| format!("{path:?}: {error}"))
+        read_input(file, MAX_BYTES, format).map_err(|error| format!("{path:?}: {error}"))
     };
     Comparison::try_aligned(load(left)?, load(right)?, MAX_CELLS)
         .map_err(|_| "traces exceed the alignment limit of 1,000,000 cells".to_string())
 }
 
-fn check(left: &Path, right: &Path, json: bool) -> Result<bool, String> {
-    let comparison = load_comparison(left, right, true)?;
+fn check(left: &Path, right: &Path, json: bool, format: InputFormat) -> Result<bool, String> {
+    let comparison = load_comparison(left, right, true, format)?;
     let (different, summary) = if json {
         summarize_json(&comparison)
     } else {
@@ -104,8 +130,8 @@ fn check(left: &Path, right: &Path, json: bool) -> Result<bool, String> {
     Ok(different)
 }
 
-fn view(left: &Path, right: &Path) -> Result<(), String> {
-    let comparison = load_comparison(left, right, false)?;
+fn view(left: &Path, right: &Path, format: InputFormat) -> Result<(), String> {
+    let comparison = load_comparison(left, right, false, format)?;
     let mut state = Navigation::new(&comparison);
     let stdin = io::stdin();
     let mut input = stdin.lock();

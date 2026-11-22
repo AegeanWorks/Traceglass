@@ -18,6 +18,8 @@
 
 `check` may read one trace from standard input using a bare `-`; the shell rejects two stdin operands before reading and uses the same bounded input adapter for files and pipes. `view` still reserves standard input for navigation and treats `-` as a filename. Subprocess tests cover both pipe positions, JSON mode, invalid UTF-8 and the ambiguous two-pipe case.
 
+Raw `--lines` mode is explicitly selected at the shell edge. The same bounded UTF-8 reader feeds a pure parser that maps each input line to an event with the shared name `line`; comparison, navigation and rendering remain unchanged. Tests cover blank lines, limits, piped input, JSON and terminal viewing. Equal-cost alignment choices for repeated lines remain heuristic.
+
 ## Native paths
 
 The shell now reads arguments as operating-system strings and passes file arguments as native paths into the file adapter; event parsing and alignment remain unchanged. A Windows test reproduces the former panic with an unpaired surrogate and verifies an ordinary input error instead. A Unix-only test exercises a real non-UTF-8 filename, but was not run on the Windows host.

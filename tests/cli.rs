@@ -117,6 +117,63 @@ fn check_accepts_a_pipe_on_either_side_and_rejects_two_pipes() {
     assert!(String::from_utf8_lossy(&ambiguous.stderr).contains("standard input"));
 }
 
+#[test]
+fn raw_lines_work_with_files_pipes_and_json() {
+    let dir = std::env::temp_dir().join(format!("traceglass-raw-{}", std::process::id()));
+    fs::create_dir_all(&dir).unwrap();
+    struct Cleanup(std::path::PathBuf);
+    impl Drop for Cleanup {
+        fn drop(&mut self) {
+            let _ = fs::remove_dir_all(&self.0);
+        }
+    }
+    let _cleanup = Cleanup(dir.clone());
+    let before = dir.join("before.log");
+    let after = dir.join("after.log");
+    fs::write(&before, "start\n\nfinish\n").unwrap();
+    fs::write(&after, "start\nretry\n\nfinish\n").unwrap();
+    let result = Command::new(env!("CARGO_BIN_EXE_traceglass"))
+        .args(["check", "--json", "--lines"])
+        .arg(&before)
+        .arg(&after)
+        .stdin(Stdio::null())
+        .output()
+        .unwrap();
+    assert_eq!(result.status.code(), Some(1));
+    assert_eq!(result.stdout, b"{\"version\":1,\"equal\":false,\"rows\":4,\"differences\":1,\"first\":{\"row\":2,\"left_line\":null,\"right_line\":2}}\n");
+    let mut child = Command::new(env!("CARGO_BIN_EXE_traceglass"))
+        .args(["check", "--lines"])
+        .arg(&before)
+        .arg("-")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .spawn()
+        .unwrap();
+    child
+        .stdin
+        .take()
+        .unwrap()
+        .write_all(b"start\n\nfinish\n")
+        .unwrap();
+    let result = child.wait_with_output().unwrap();
+    assert_eq!(result.status.code(), Some(0));
+    assert_eq!(result.stdout, b"equal: 3 rows\n");
+    let mut view = Command::new(env!("CARGO_BIN_EXE_traceglass"))
+        .args(["view", "--lines"])
+        .arg(&before)
+        .arg(&after)
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .spawn()
+        .unwrap();
+    view.stdin.take().unwrap().write_all(b"q\n").unwrap();
+    let result = view.wait_with_output().unwrap();
+    assert!(result.status.success());
+    let output = String::from_utf8(result.stdout).unwrap();
+    assert!(output.contains("[inserted]"));
+    assert!(output.contains("R line 2: line: retry"));
+}
+
 #[cfg(any(unix, windows))]
 #[test]
 fn non_unicode_path_reports_an_error_instead_of_panicking() {

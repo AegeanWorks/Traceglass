@@ -1,13 +1,13 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "piped-traces",
+    "task_id": "raw-lines",
     "last_phase": "phase 4",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1795351999.1839924,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1795352271.7725203,
     "owner": "codex:traceglass",
-    "lease_until": 1795359199.1839924,
+    "lease_until": 1795359471.7725203,
     "started_by": "codex:traceglass",
     "continuations": [],
     "workspaces": [
@@ -15,56 +15,9 @@
         "name": "traceglass",
         "path": "projects/traceglass"
       }
-    ],
-    "completed_at": 1795352038.359708,
-    "completed_head": "66f88071e4072da55a6eb5701c9132cfb88eb08d",
-    "completed_tree": "f84dddbbaacb105055931a7765a05cec4a67a582"
+    ]
   },
   "checkpoints": [
-    {
-      "task_id": "build",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "Character detail and examples reviewed; fresh target runs 17 tests and all five project gates pass",
-      "files_affected": [
-        ".aikit/ui_history.json",
-        "README.md",
-        "reports/aikit-observations.md",
-        "reports/architecture-audit.md",
-        "src/ui.rs",
-        "tests/ui.rs",
-        "examples/after.trace",
-        "examples/before.trace"
-      ],
-      "status": "in_progress",
-      "timestamp": 1795347530.162463,
-      "timestamp_str": "2026-11-22 14:38:50",
-      "agent": "codex:traceglass",
-      "checklists": "passed",
-      "workspaces": [
-        {
-          "name": "traceglass",
-          "path": "projects/traceglass"
-        }
-      ]
-    },
-    {
-      "task_id": "build",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'build' completed successfully.",
-      "status": "completed",
-      "timestamp": 1795347554.453369,
-      "timestamp_str": "2026-11-22 14:39:14",
-      "agent": "codex:traceglass",
-      "head": "0138885e6e5be6be110989ace0b9cbe69b50aa4f",
-      "delivery": {
-        "roots": [
-          "."
-        ],
-        "forced": false
-      }
-    },
     {
       "task_id": "audit-final",
       "phase": "phase 2",
@@ -471,6 +424,60 @@
         ],
         "forced": false
       }
+    },
+    {
+      "task_id": "raw-lines",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/1] Support bounded raw line comparisons in view and check",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1795352106.9428933,
+      "timestamp_str": "2026-11-22 15:55:06",
+      "agent": "codex:traceglass",
+      "impact_assessment": {
+        "why": "Programmers need to compare ordinary logs without transforming them into a special trace format",
+        "benefits": "Reuse alignment, terminal navigation, pipes and JSON for UTF-8 lines",
+        "risks": "contract: format ambiguity and option parsing; dependency: none; concurrency: input streams; state: blank line preservation",
+        "mitigation": "Use an explicit format option, preserve existing defaults and limits, test files, pipes, blank lines and JSON"
+      },
+      "plan_digest": "e5618f7c9af991075f79bd6d1544d78262cac2ddc8f10b473b93d96109cef2c9",
+      "workspaces": [
+        {
+          "name": "traceglass",
+          "path": "projects/traceglass"
+        }
+      ]
+    },
+    {
+      "task_id": "raw-lines",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "Raw line mode tested with files, pipes, blank lines and JSON; all project gates passed",
+      "files_affected": [
+        ".aikit/decisions.md",
+        ".aikit/task_ledger.json",
+        ".aikit/task_ledger_archive.jsonl",
+        ".aikit/ui_history.json",
+        "README.md",
+        "reports/architecture-audit.md",
+        "src/input.rs",
+        "src/lib.rs",
+        "src/main.rs",
+        "tests/cli.rs",
+        "tests/input.rs"
+      ],
+      "status": "in_progress",
+      "timestamp": 1795352271.7725203,
+      "timestamp_str": "2026-11-22 15:57:51",
+      "agent": "codex:traceglass",
+      "checklists": "passed",
+      "workspaces": [
+        {
+          "name": "traceglass",
+          "path": "projects/traceglass"
+        }
+      ]
     }
   ]
 }

@@ -420,5 +420,57 @@
     "final_snapshot_entries": 0,
     "surface_digest": "9981254be7e4b39488d16c71475fac73f28bf1f1f99fec6f6305c8c85a3bebbc",
     "baseline_digest": "9981254be7e4b39488d16c71475fac73f28bf1f1f99fec6f6305c8c85a3bebbc"
+  },
+  {
+    "schema": 1,
+    "surface": "terminal",
+    "mode": "backend",
+    "visual_change": false,
+    "changed_paths": [
+      "src/input.rs",
+      "src/lib.rs",
+      "src/main.rs",
+      "tests/cli.rs",
+      "tests/input.rs"
+    ],
+    "no_visual_reason": "",
+    "baseline_commit": "e9597178b144c200669a8d822d491df297105a95",
+    "contract_hash": "2d6d0e0dc5a2742c02d264765de1c4cf5593335bf3c926bc6a83057d5eb95c4b",
+    "started_at": 1795352111.7492685,
+    "finished_at": 1795352231.7690084,
+    "strikes": 0,
+    "reviewer": "",
+    "review": {
+      "reviewer": "",
+      "surface": "terminal",
+      "surface_digest": "9981254be7e4b39488d16c71475fac73f28bf1f1f99fec6f6305c8c85a3bebbc",
+      "snapshot_digest": "",
+      "snapshot_entries": 0,
+      "visual": false,
+      "reviewed_at": 1795352231.7690098,
+      "scoped_paths": [
+        "src/input.rs",
+        "src/lib.rs",
+        "src/main.rs",
+        "tests/cli.rs",
+        "tests/input.rs"
+      ],
+      "scoped_digest": "22655c0f7dcf7de8f9d0744bf717fcdcc26a55889a009b9de557a4f5064e10a9"
+    },
+    "allowed_removals": [],
+    "allowed_tests": [
+      {
+        "path": "tests/input.rs",
+        "reason": "Test bounded raw lines including blanks and encoding"
+      },
+      {
+        "path": "tests/cli.rs",
+        "reason": "Exercise raw files, pipes and JSON"
+      }
+    ],
+    "final_snapshot_digest": "",
+    "final_snapshot_entries": 0,
+    "surface_digest": "9981254be7e4b39488d16c71475fac73f28bf1f1f99fec6f6305c8c85a3bebbc",
+    "baseline_digest": "9981254be7e4b39488d16c71475fac73f28bf1f1f99fec6f6305c8c85a3bebbc"
   }
 ]
