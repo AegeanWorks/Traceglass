@@ -3,8 +3,8 @@
   "active_task": {
     "task_id": "native-paths",
     "last_phase": "phase 4",
-    "active_phase": 4,
-    "status": "in_progress",
+    "active_phase": 5,
+    "status": "completed",
     "updated_at": 1795351135.6137671,
     "owner": "codex:traceglass",
     "lease_until": 1795358335.6137671,
@@ -15,7 +15,10 @@
         "name": "traceglass",
         "path": "projects/traceglass"
       }
-    ]
+    ],
+    "completed_at": 1795351166.9869711,
+    "completed_head": "5d1aa495b38f618d550d65b79f53ad38d8c99223",
+    "completed_tree": "526bbea5372e4116bc7ab9dbe4d10ca33b0d94f4"
   },
   "checkpoints": [
     {
@@ -564,6 +567,23 @@
           "path": "projects/traceglass"
         }
       ]
+    },
+    {
+      "task_id": "native-paths",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'native-paths' completed successfully.",
+      "status": "completed",
+      "timestamp": 1795351167.174618,
+      "timestamp_str": "2026-11-22 15:39:27",
+      "agent": "codex:traceglass",
+      "head": "5d1aa495b38f618d550d65b79f53ad38d8c99223",
+      "delivery": {
+        "roots": [
+          "."
+        ],
+        "forced": false
+      }
     }
   ]
 }
