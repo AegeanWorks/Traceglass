@@ -3,8 +3,8 @@
   "active_task": {
     "task_id": "view-window",
     "last_phase": "phase 4",
-    "active_phase": 4,
-    "status": "in_progress",
+    "active_phase": 5,
+    "status": "completed",
     "updated_at": 1795355382.5263252,
     "owner": "opencode:hy4-flash-free",
     "lease_until": 1795362582.5263252,
@@ -15,33 +15,12 @@
         "name": "traceglass",
         "path": "projects/traceglass"
       }
-    ]
+    ],
+    "completed_at": 1795355420.3306165,
+    "completed_head": "d1af7e5efd96276b5bdcf88d1df61fd8dcf00b17",
+    "completed_tree": "c47550f793c115cf06dda22b933c61f175f1dfa3"
   },
   "checkpoints": [
-    {
-      "task_id": "source-lines",
-      "phase": "phase 2",
-      "phase_num": 2,
-      "description": "[1/1] Show source line numbers for aligned events in the terminal view",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1795351239.7563744,
-      "timestamp_str": "2026-11-22 15:40:39",
-      "agent": "codex:traceglass",
-      "impact_assessment": {
-        "why": "Aligned row numbers diverge from file line numbers after insertions and removals",
-        "benefits": "Programmers can locate corresponding events in either source trace",
-        "risks": "contract: index versus line conventions; dependency: none; concurrency: snapshots fixed; state: missing-side mappings",
-        "mitigation": "Expose zero-based source indices in the pure core, render one-based lines, test insertion, deletion and missing rows"
-      },
-      "plan_digest": "8ddb8bb2018f5489c884a6e0e8cea566cd5f9d0536bdc26022c20376e2de2816",
-      "workspaces": [
-        {
-          "name": "traceglass",
-          "path": "projects/traceglass"
-        }
-      ]
-    },
     {
       "task_id": "source-lines",
       "phase": "phase 4",
@@ -482,6 +461,23 @@
           "path": "projects/traceglass"
         }
       ]
+    },
+    {
+      "task_id": "view-window",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'view-window' completed successfully.",
+      "status": "completed",
+      "timestamp": 1795355420.47732,
+      "timestamp_str": "2026-11-22 16:50:20",
+      "agent": "opencode:hy4-flash-free",
+      "head": "d1af7e5efd96276b5bdcf88d1df61fd8dcf00b17",
+      "delivery": {
+        "roots": [
+          "."
+        ],
+        "forced": false
+      }
     }
   ]
 }
