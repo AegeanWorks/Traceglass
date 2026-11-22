@@ -1,14 +1,14 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "prefix-alignment",
+    "task_id": "check-all-differences",
     "last_phase": "phase 4",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1795352672.2690578,
-    "owner": "codex:traceglass",
-    "lease_until": 1795359872.2690578,
-    "started_by": "codex:traceglass",
+    "updated_at": 1795354651.1466234,
+    "owner": "opencode:hy4-flash-free",
+    "lease_until": 1795361851.1466234,
+    "started_by": "opencode:hy4-flash-free",
     "continuations": [],
     "workspaces": [
       {
@@ -18,74 +18,6 @@
     ]
   },
   "checkpoints": [
-    {
-      "task_id": "ci-check",
-      "phase": "phase 2",
-      "phase_num": 2,
-      "description": "[1/1] Add deterministic non-interactive trace checks and verify UI, errors and documentation",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1795350767.031188,
-      "timestamp_str": "2026-11-22 15:32:47",
-      "agent": "codex:traceglass",
-      "impact_assessment": {
-        "why": "Programmers need to detect trace regressions automatically without an interactive terminal",
-        "benefits": "Reusable CI exit codes and the same bounded alignment as the UI",
-        "risks": "contract: exit codes and output ambiguity; dependency: none; concurrency: snapshots may change while read; state: divergent render paths",
-        "mitigation": "Document codes, isolate file reads at the edge, share comparison core, exercise real subprocess paths"
-      },
-      "plan_digest": "f5c95bde83b6dd8bbd51aafd8200ec868b4a9929d3d6886e07dfd287c7ed9270",
-      "workspaces": [
-        {
-          "name": "traceglass",
-          "path": "projects/traceglass"
-        }
-      ]
-    },
-    {
-      "task_id": "ci-check",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "Non-interactive check reviewed; equal, difference and error cases pass; all project gates passed",
-      "files_affected": [
-        ".aikit/decisions.md",
-        ".aikit/task_ledger.json",
-        ".aikit/ui_history.json",
-        "README.md",
-        "reports/architecture-audit.md",
-        "src/main.rs",
-        "src/ui.rs",
-        "tests/cli.rs"
-      ],
-      "status": "in_progress",
-      "timestamp": 1795350916.4670048,
-      "timestamp_str": "2026-11-22 15:35:16",
-      "agent": "codex:traceglass",
-      "checklists": "passed",
-      "workspaces": [
-        {
-          "name": "traceglass",
-          "path": "projects/traceglass"
-        }
-      ]
-    },
-    {
-      "task_id": "ci-check",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'ci-check' completed successfully.",
-      "status": "completed",
-      "timestamp": 1795350944.8678348,
-      "timestamp_str": "2026-11-22 15:35:44",
-      "agent": "codex:traceglass",
-      "head": "38f2b64405bea57d29a1115fe4efa3db8035748c",
-      "delivery": {
-        "roots": [
-          "."
-        ],
-        "forced": false
-      }
-    },
     {
       "task_id": "native-paths",
       "phase": "phase 2",
@@ -477,6 +409,74 @@
       "timestamp": 1795352672.2690578,
       "timestamp_str": "2026-11-22 16:04:32",
       "agent": "codex:traceglass",
+      "checklists": "passed",
+      "workspaces": [
+        {
+          "name": "traceglass",
+          "path": "projects/traceglass"
+        }
+      ]
+    },
+    {
+      "task_id": "prefix-alignment",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'prefix-alignment' completed successfully.",
+      "status": "completed",
+      "timestamp": 1795352716.449003,
+      "timestamp_str": "2026-11-22 16:05:16",
+      "agent": "codex:traceglass",
+      "head": "d4c8a9e7eafef721260c2e8caaf017cee8cd5637",
+      "delivery": {
+        "roots": [
+          "."
+        ],
+        "forced": false
+      }
+    },
+    {
+      "task_id": "check-all-differences",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/4] Plan: complete structured difference reporting with order-independent CLI flags",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1795354069.1529832,
+      "timestamp_str": "2026-11-22 16:27:49",
+      "agent": "opencode:hy4-flash-free",
+      "impact_assessment": {
+        "why": "CI consumers of 'check --json' only receive the first difference; locating every divergence needs repeated runs or prose parsing, and flag order is brittle",
+        "benefits": "A versioned v2 JSON document with all differing rows, source lines and kind; flags in any order; a real --help; unchanged v1 output and exit codes",
+        "risks": "contract: JSON schema and CLI flag parsing; dependency: none; concurrency: stdin/pipes unchanged; state: snapshots stay immutable",
+        "mitigation": "Keep v1 bytes identical, gate v2 behind --all-differences requiring --json, refactor parsing behind pure helpers covered by the existing CLI regression suite, verify with the GNU toolchain"
+      },
+      "plan_digest": "c49102fa41e211b89a2661158c37f2396fcf1bd93a3ed5aea9b60c8ce351f5fd",
+      "workspaces": [
+        {
+          "name": "traceglass",
+          "path": "projects/traceglass"
+        }
+      ]
+    },
+    {
+      "task_id": "check-all-differences",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "Agent reviewed the running CLI (help, v2 JSON, flag order, v1 parity, view navigation); 36 tests pass on GNU toolchain; all 5 project gates pass with RUSTUP_TOOLCHAIN set",
+      "files_affected": [
+        "src/main.rs",
+        "src/ui.rs",
+        "tests/cli.rs",
+        "tests/ui.rs",
+        "README.md",
+        ".aikit/decisions.md",
+        "reports/architecture-audit.md",
+        "reports/aikit-observations.md"
+      ],
+      "status": "in_progress",
+      "timestamp": 1795354651.1466234,
+      "timestamp_str": "2026-11-22 16:37:31",
+      "agent": "opencode:hy4-flash-free",
       "checklists": "passed",
       "workspaces": [
         {
