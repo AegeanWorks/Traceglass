@@ -201,6 +201,78 @@ fn long_shared_prefix_can_be_compared_with_json_locations() {
     assert_eq!(output.stdout, b"{\"version\":1,\"equal\":false,\"rows\":1501,\"differences\":1,\"first\":{\"row\":1501,\"left_line\":null,\"right_line\":1501}}\n");
 }
 
+#[test]
+fn check_json_all_reports_every_difference_with_flags_in_any_order() {
+    let dir = std::env::temp_dir();
+    let left = dir.join(format!("tg-all-left-{}.trace", std::process::id()));
+    let right = dir.join(format!("tg-all-right-{}.trace", std::process::id()));
+    fs::write(&left, "a\t1\nb\t1\nc\t1\n").unwrap();
+    fs::write(&right, "a\t1\nb\t2\nc\t1\nd\t3\n").unwrap();
+    let expected = b"{\"version\":2,\"equal\":false,\"rows\":4,\"differences\":2,\"items\":[{\"row\":2,\"left_line\":2,\"right_line\":2,\"kind\":\"changed\"},{\"row\":4,\"left_line\":null,\"right_line\":4,\"kind\":\"inserted\"}]}\n";
+    for args in [
+        vec!["check", "--json", "--all-differences"],
+        vec!["check", "--all-differences", "--json"],
+    ] {
+        let output = Command::new(env!("CARGO_BIN_EXE_traceglass"))
+            .args(args)
+            .arg(&left)
+            .arg(&right)
+            .output()
+            .unwrap();
+        assert_eq!(output.status.code(), Some(1));
+        assert_eq!(output.stdout, expected);
+    }
+    let _ = fs::remove_file(&left);
+    let _ = fs::remove_file(&right);
+}
+
+#[test]
+fn view_accepts_a_256_byte_command_and_rejects_257_bytes() {
+    for (len, accepted) in [(256, true), (257, false)] {
+        let mut child = Command::new(env!("CARGO_BIN_EXE_traceglass"))
+            .args(["view", "examples/before.trace", "examples/after.trace"])
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .unwrap();
+        let mut input = vec![b'x'; len];
+        input.extend_from_slice(b"\nq\n");
+        child.stdin.take().unwrap().write_all(&input).unwrap();
+        let out = child.wait_with_output().unwrap();
+        assert_eq!(out.status.success(), accepted);
+        let text = String::from_utf8_lossy(if accepted { &out.stdout } else { &out.stderr });
+        assert!(text.contains(if accepted { "Unknown command" } else { "command exceeds 256 bytes" }));
+    }
+}
+
+#[test]
+fn all_differences_requires_json_and_help_exits_successfully() {
+    let invalid = Command::new(env!("CARGO_BIN_EXE_traceglass"))
+        .args([
+            "check",
+            "--all-differences",
+            "examples/before.trace",
+            "examples/after.trace",
+        ])
+        .stdin(Stdio::null())
+        .output()
+        .unwrap();
+    assert_eq!(invalid.status.code(), Some(2));
+    assert!(invalid.stdout.is_empty());
+    assert!(String::from_utf8_lossy(&invalid.stderr).contains("--json"));
+
+    for flag in ["help", "--help"] {
+        let output = Command::new(env!("CARGO_BIN_EXE_traceglass"))
+            .arg(flag)
+            .output()
+            .unwrap();
+        assert_eq!(output.status.code(), Some(0));
+        let text = String::from_utf8(output.stdout).unwrap();
+        assert!(text.contains("Usage:") && text.contains("--all-differences"));
+    }
+}
+
 #[cfg(any(unix, windows))]
 #[test]
 fn non_unicode_path_reports_an_error_instead_of_panicking() {

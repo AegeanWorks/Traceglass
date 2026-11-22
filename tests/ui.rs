@@ -1,4 +1,4 @@
-use traceglass::ui::{parse_action, render, summarize_json};
+use traceglass::ui::{parse_action, render, summarize_json, summarize_json_all};
 use traceglass::{parse_trace, Comparison, Navigation, NavigationAction};
 
 #[test]
@@ -76,4 +76,25 @@ fn json_summary_handles_empty_and_changed_traces() {
     let right = parse_trace("step\tnew\n").unwrap();
     let comparison = Comparison::try_aligned(left, right, 4).unwrap();
     assert_eq!(summarize_json(&comparison).1, "{\"version\":1,\"equal\":false,\"rows\":1,\"differences\":1,\"first\":{\"row\":1,\"left_line\":1,\"right_line\":1}}\n");
+}
+
+#[test]
+fn json_all_lists_every_difference_with_kind_and_source_lines() {
+    let left = parse_trace("open\t1\nload\told\nkeep\t1\ndrop\t1\nclose\t1\n").unwrap();
+    let right = parse_trace("open\t1\nload\tnew\nkeep\t1\nadd\t1\nclose\t1\n").unwrap();
+    let comparison = Comparison::try_aligned(left, right, 100).unwrap();
+    let (different, output) = summarize_json_all(&comparison);
+    assert!(different);
+    assert_eq!(output, "{\"version\":2,\"equal\":false,\"rows\":6,\"differences\":3,\"items\":[{\"row\":2,\"left_line\":2,\"right_line\":2,\"kind\":\"changed\"},{\"row\":4,\"left_line\":4,\"right_line\":null,\"kind\":\"removed\"},{\"row\":5,\"left_line\":null,\"right_line\":4,\"kind\":\"inserted\"}]}\n");
+}
+
+#[test]
+fn json_all_reports_an_empty_item_list_for_equal_and_empty_traces() {
+    let step = parse_trace("step\t1\n").unwrap();
+    let equal = Comparison::try_aligned(step.clone(), step, 4).unwrap();
+    let (different, output) = summarize_json_all(&equal);
+    assert!(!different);
+    assert_eq!(output, "{\"version\":2,\"equal\":true,\"rows\":1,\"differences\":0,\"items\":[]}\n");
+    let empty = Comparison::try_aligned(vec![], vec![], 1).unwrap();
+    assert_eq!(summarize_json_all(&empty).1, "{\"version\":2,\"equal\":true,\"rows\":0,\"differences\":0,\"items\":[]}\n");
 }

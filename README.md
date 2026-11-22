@@ -24,6 +24,8 @@ In `check`, use a single bare `-` in place of either file to read that trace fro
 
 Use `check --json before.trace after.trace` for a versioned JSON result. Version 1 has `version`, `equal`, `rows`, `differences`, and `first`. When traces match, `first` is `null`; otherwise it contains the one-based aligned `row` and original `left_line` and `right_line`. A missing side is `null`. JSON mode keeps the same exit statuses; errors produce diagnostics on stderr and no JSON on stdout.
 
+Add `--all-differences` to get version 2, which replaces `first` with an `items` array listing **every** differing row in alignment order. Each item has `row`, `left_line`, `right_line` and `kind` (`changed`, `inserted` or `removed`); a missing side is `null` and an equal trace has an empty array. `--all-differences` requires `--json` and can be combined with `--lines` and a piped `-`. Flags may appear in any order; `traceglass help` (or `--help`) prints the command summary and exits zero.
+
 Alignment pairs events by name, so insertions do not necessarily shift every later match. Repeated names can produce multiple valid alignments; deterministic tie rules choose one. A difference does not establish its cause. Inputs are limited to 4 MiB each. Identical leading events are matched directly; the remaining alignment is limited to one million matrix cells, so long traces with early differences may still be rejected. Long event fields are clipped to 120 characters in the view.
 
 File arguments use native operating-system paths, including non-Unicode filenames where the filesystem supports them. Trace file contents must still be UTF-8.

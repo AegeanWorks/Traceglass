@@ -37,3 +37,31 @@ The shell now reads arguments as operating-system strings and passes file argume
 The public repository inventory was retrieved through GitHub's API on 2026-11-22 (one page of 100 was sufficient; page two was empty). Sextant already verifies state machines and checks golden traces for the first differing line. Traceglass compares generic program event traces and offers interactive inspection of bounded insertion/deletion-aware alignment. This distinguishes its workflow from Sextant; it is not a claim of global novelty.
 
 The profile's paginated starred-repository names were also inspected. Descriptions of additional projects not present in the public owner inventory did not identify another trace comparison workbench.
+
+## Complete JSON differences and CLI contract (2026-11-22, second session)
+
+`ui::summarize_json_all` is a pure function that walks the aligned rows once and emits schema
+version 2: `version`, `equal`, `rows`, `differences` and an `items` array. Each item carries the
+one-based aligned row, both one-based source lines (`null` for an absent side) and a `kind` of
+`changed`, `inserted` or `removed`, derived from which sides are present. It shares the same
+comparison and source-index mapping as the text and v1 JSON summaries, so the three renderings
+cannot disagree. Version 1 output and all exit codes are byte-identical; v2 is opt-in through
+`check --all-differences`, which is refused without `--json`.
+
+Argument parsing is now one order-independent parser that keeps file operands as native
+`PathBuf` values until the shell opens them (ADR-004). `view` accepts `--lines`; `check` accepts
+`--json`, `--lines` and `--all-differences` in any order, and rejects two identical flags by
+treating the second as an operand and therefore a usage error. `help`, `--help` and `-h` write
+the command summary to stdout with exit zero; other misuse still writes it to stderr with exit
+two. The interactive command reader now measures the command bytes without the newline, so a
+256-byte command is accepted and 257 bytes is rejected, matching the documented limit.
+
+**Agent review of the running UI** (project rule G-002, 2026-11-22): with the GNU toolchain
+selected, the compiled binary was exercised directly. `--help` printed the usage summary and
+exited 0; `check --json --all-differences examples/before.trace examples/after.trace` emitted
+v2 with one `inserted` item at row 2 and exited 1; reversing the flags and adding `--lines`
+produced the same document; v1 output remained unchanged; omitting `--json` exited 2 with usage
+on stderr. A two-difference pair produced both a `changed` and an `inserted` item in alignment
+order. `view` with piped `N`/`q` still highlighted the inserted row and exited 0. All 36 tests
+passed on Rust 1.100 with the GNU toolchain; the declared 1.83 minimum and physical terminals
+remain untested.

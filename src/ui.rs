@@ -61,6 +61,44 @@ pub fn summarize_json(comparison: &Comparison) -> (bool, String) {
     )
 }
 
+/// Version 2 JSON reports every differing row with source locations and its kind.
+pub fn summarize_json_all(comparison: &Comparison) -> (bool, String) {
+    let line = |value: Option<usize>| {
+        value.map(|i| (i + 1).to_string()).unwrap_or_else(|| "null".into())
+    };
+    let mut items = Vec::new();
+    let mut count = 0usize;
+    for index in 0..comparison.len() {
+        if !comparison.differs(index) {
+            continue;
+        }
+        let (left, right) = comparison.source_indices(index).expect("bounded row");
+        let (kind, left_line, right_line) = match (left, right) {
+            (None, Some(_)) => ("inserted", "null".to_string(), line(right)),
+            (Some(_), None) => ("removed", line(left), "null".to_string()),
+            (Some(_), Some(_)) => ("changed", line(left), line(right)),
+            (None, None) => continue,
+        };
+        count += 1;
+        items.push(format!(
+            "{{\"row\":{},\"left_line\":{},\"right_line\":{},\"kind\":\"{kind}\"}}",
+            index + 1,
+            left_line,
+            right_line
+        ));
+    }
+    (
+        count != 0,
+        format!(
+            "{{\"version\":2,\"equal\":{},\"rows\":{},\"differences\":{},\"items\":[{}]}}\n",
+            count == 0,
+            comparison.len(),
+            count,
+            items.join(",")
+        ),
+    )
+}
+
 pub fn parse_action(command: &str) -> Option<NavigationAction> {
     match command.trim() {
         "p" | "previous" => Some(NavigationAction::Previous),

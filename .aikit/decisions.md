@@ -74,3 +74,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: The full matrix limit rejects long traces even when they share a long identical beginning.
 - **Decision**: Comparison matches identical leading events first, aligns the remaining slices with the existing matrix limit, and offsets source indices; the public full-matrix align function remains unchanged.
 - **Consequences**: Long common-prefix traces can be compared without increasing the matrix limit. Early differences can still exceed it. Tests compare deterministic results against the full-matrix reference.
+
+### ADR-010: Version 2 JSON reports every differing row
+- **Date**: 2026-11-22
+- **Status**: Accepted
+- **Context**: CI consumers of check --json only receive the first difference; repeated runs or prose parsing are needed to locate the rest, flags are order-sensitive, and there is no success exit for help
+- **Decision**: Add check --all-differences (requires --json) emitting schema version 2 with an items array of every differing row, its one-based source lines and kind; parse flags in any order; add help/--help/-h; accept a 256-byte view command
+- **Consequences**: Version 1 output and all exit codes stay byte-identical; --all-differences without --json is a usage error; kind is changed, inserted or removed; the view command limit now matches the documented 256 bytes

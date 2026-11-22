@@ -1,71 +1,136 @@
+use std::ffi::OsString;
 use std::io::{self, BufRead, Read, Write};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 use traceglass::input::{read_input, InputFormat};
-use traceglass::ui::{parse_action, render, summarize, summarize_json};
+use traceglass::ui::{parse_action, render, summarize, summarize_json, summarize_json_all};
 use traceglass::{parse_trace, Comparison, Navigation};
 
-fn main() -> ExitCode {
-    let args: Vec<_> = std::env::args_os().skip(1).collect();
-    match args.as_slice() {
-        [command] if command == "inventory" => {
-            println!("cli|inventory|inventory\ncli|demo|demo --scripted\ncli|view|view LEFT RIGHT\ncli|check|check LEFT RIGHT");
-            ExitCode::SUCCESS
+/// A parsed command. Operands stay native paths until the shell opens them (ADR-004).
+enum Command {
+    Help,
+    Inventory,
+    Demo { seed: Option<u64> },
+    View { left: PathBuf, right: PathBuf, format: InputFormat },
+    Check {
+        left: PathBuf,
+        right: PathBuf,
+        json: bool,
+        all: bool,
+        format: InputFormat,
+    },
+}
+
+fn is(arg: &OsString, text: &str) -> bool {
+    arg.to_str() == Some(text)
+}
+
+/// Parse flags in any order, then require exactly two native path operands.
+fn parse_args(args: &[OsString]) -> Result<Command, ()> {
+    let Some((first, rest)) = args.split_first() else {
+        return Err(());
+    };
+    if is(first, "help") || is(first, "--help") || is(first, "-h") {
+        return if rest.is_empty() { Ok(Command::Help) } else { Err(()) };
+    }
+    if is(first, "inventory") {
+        return if rest.is_empty() { Ok(Command::Inventory) } else { Err(()) };
+    }
+    if is(first, "demo") {
+        if rest.len() == 1 && is(&rest[0], "--scripted") {
+            return Ok(Command::Demo { seed: None });
         }
-        [command, scripted] if command == "demo" && scripted == "--scripted" => demo(0),
-        [command, scripted, flag, value]
-            if command == "demo" && scripted == "--scripted" && flag == "--seed" =>
-        {
-            match value.to_str().and_then(|text| text.parse::<u64>().ok()) {
-                Some(seed) => demo(seed),
-                None => usage(),
-            }
+        if rest.len() == 3 && is(&rest[0], "--scripted") && is(&rest[1], "--seed") {
+            let seed = rest[2].to_str().and_then(|s| s.parse().ok()).ok_or(())?;
+            return Ok(Command::Demo { seed: Some(seed) });
         }
-        [command, left, right] if command == "view" => {
-            match view(Path::new(left), Path::new(right), InputFormat::Structured) {
-                Ok(()) => ExitCode::SUCCESS,
-                Err(error) => {
-                    eprintln!("Error: {error}");
-                    ExitCode::FAILURE
-                }
-            }
+        return Err(());
+    }
+    let view = is(first, "view");
+    if !view && !is(first, "check") {
+        return Err(());
+    }
+    let (mut json, mut all, mut lines) = (false, false, false);
+    let mut operands = Vec::new();
+    for arg in rest {
+        if is(arg, "--json") {
+            json = true;
+        } else if is(arg, "--lines") {
+            lines = true;
+        } else if is(arg, "--all-differences") {
+            all = true;
+        } else {
+            operands.push(arg);
         }
-        [command, flag, left, right] if command == "view" && flag == "--lines" => {
-            match view(Path::new(left), Path::new(right), InputFormat::Lines) {
-                Ok(()) => ExitCode::SUCCESS,
-                Err(error) => {
-                    eprintln!("Error: {error}");
-                    ExitCode::FAILURE
-                }
-            }
-        }
-        [command, left, right] if command == "check" => run_check(
-            Path::new(left),
-            Path::new(right),
-            false,
-            InputFormat::Structured,
-        ),
-        [command, flag, left, right] if command == "check" && flag == "--json" => run_check(
-            Path::new(left),
-            Path::new(right),
-            true,
-            InputFormat::Structured,
-        ),
-        [command, flag, left, right] if command == "check" && flag == "--lines" => {
-            run_check(Path::new(left), Path::new(right), false, InputFormat::Lines)
-        }
-        [command, a, b, left, right]
-            if command == "check"
-                && ((a == "--json" && b == "--lines") || (a == "--lines" && b == "--json")) =>
-        {
-            run_check(Path::new(left), Path::new(right), true, InputFormat::Lines)
-        }
-        _ => usage(),
+    }
+    if operands.len() != 2 {
+        return Err(());
+    }
+    let format = if lines {
+        InputFormat::Lines
+    } else {
+        InputFormat::Structured
+    };
+    let left = PathBuf::from(operands[0]);
+    let right = PathBuf::from(operands[1]);
+    if view {
+        return (!json && !all)
+            .then_some(Command::View { left, right, format })
+            .ok_or(());
+    }
+    if !all || json {
+        Ok(Command::Check { left, right, json, all, format })
+    } else {
+        Err(())
     }
 }
 
-fn run_check(left: &Path, right: &Path, json: bool, format: InputFormat) -> ExitCode {
-    match check(left, right, json, format) {
+const HELP: &str = "\
+Usage: traceglass view [--lines] LEFT RIGHT | check [--json] [--all-differences] [--lines] LEFT RIGHT | inventory | demo --scripted [--seed N] | help\n\
+Flags may appear in any order. --lines treats each UTF-8 line as an event; --json emits version 1; --all-differences requires --json and emits version 2 with every differing row; - reads one trace from stdin in check.\n\
+Exit codes: check 0 equal, 1 different, 2 usage/input/output error.\n";
+
+fn usage() -> ExitCode {
+    eprint!("{HELP}");
+    ExitCode::from(2)
+}
+
+fn main() -> ExitCode {
+    let args: Vec<_> = std::env::args_os().skip(1).collect();
+    match parse_args(&args) {
+        Ok(Command::Help) => {
+            print!("{HELP}");
+            ExitCode::SUCCESS
+        }
+        Ok(Command::Inventory) => {
+            println!("cli|inventory|inventory\ncli|demo|demo --scripted\ncli|view|view LEFT RIGHT\ncli|check|check LEFT RIGHT");
+            ExitCode::SUCCESS
+        }
+        Ok(Command::Demo { seed }) => demo(seed.unwrap_or(0)),
+        Ok(Command::View { left, right, format }) => {
+            match view(&left, &right, format) {
+                Ok(()) => ExitCode::SUCCESS,
+                Err(error) => {
+                    eprintln!("Error: {error}");
+                    ExitCode::FAILURE
+                }
+            }
+        }
+        Ok(Command::Check { left, right, json, all, format }) => {
+            run_check(&left, &right, json, all, format)
+        }
+        Err(()) => usage(),
+    }
+}
+
+fn run_check(
+    left: &Path,
+    right: &Path,
+    json: bool,
+    all: bool,
+    format: InputFormat,
+) -> ExitCode {
+    match check(left, right, json, all, format) {
         Ok(false) => ExitCode::SUCCESS,
         Ok(true) => ExitCode::from(1),
         Err(error) => {
@@ -84,11 +149,6 @@ fn demo(seed: u64) -> ExitCode {
         comparison.len()
     );
     ExitCode::SUCCESS
-}
-
-fn usage() -> ExitCode {
-    eprintln!("Usage: traceglass view [--lines] LEFT RIGHT | check [--json] [--lines] LEFT RIGHT | inventory | demo --scripted [--seed N]");
-    ExitCode::from(2)
 }
 
 fn load_comparison(
@@ -116,9 +176,17 @@ fn load_comparison(
         .map_err(|_| "traces exceed the alignment limit of 1,000,000 cells".to_string())
 }
 
-fn check(left: &Path, right: &Path, json: bool, format: InputFormat) -> Result<bool, String> {
+fn check(
+    left: &Path,
+    right: &Path,
+    json: bool,
+    all: bool,
+    format: InputFormat,
+) -> Result<bool, String> {
     let comparison = load_comparison(left, right, true, format)?;
-    let (different, summary) = if json {
+    let (different, summary) = if all {
+        summarize_json_all(&comparison)
+    } else if json {
         summarize_json(&comparison)
     } else {
         summarize(&comparison)
@@ -143,13 +211,14 @@ fn view(left: &Path, right: &Path, format: InputFormat) -> Result<(), String> {
             .map_err(|error| format!("console output failed: {error}"))?;
         let mut line = Vec::new();
         let count = (&mut input)
-            .take(257)
+            .take(258)
             .read_until(b'\n', &mut line)
             .map_err(|error| format!("console input failed: {error}"))?;
         if count == 0 {
             break;
         }
-        if line.len() > 256 {
+        let command_len = line.len() - usize::from(line.last() == Some(&b'\n'));
+        if command_len > 256 {
             return Err("command exceeds 256 bytes".into());
         }
         let command = std::str::from_utf8(&line).map_err(|_| "command is not UTF-8".to_string())?;
