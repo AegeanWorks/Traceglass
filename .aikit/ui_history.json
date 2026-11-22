@@ -552,5 +552,53 @@
     "final_snapshot_entries": 0,
     "surface_digest": "02fe2d5a9f94c81c67a6d45305b2c67898f497b94f04299f4ad1f9b498250923",
     "baseline_digest": "02fe2d5a9f94c81c67a6d45305b2c67898f497b94f04299f4ad1f9b498250923"
+  },
+  {
+    "schema": 1,
+    "surface": "terminal",
+    "mode": "visual",
+    "visual_change": true,
+    "changed_paths": [
+      ".aikit/decisions.md",
+      "reports/aikit-observations.md",
+      "reports/architecture-audit.md",
+      "src/ui.rs",
+      "tests/ui.rs"
+    ],
+    "no_visual_reason": "",
+    "baseline_commit": "c3fdecae3c93da204e43f77bebba534e29b4d87c",
+    "contract_hash": "2d6d0e0dc5a2742c02d264765de1c4cf5593335bf3c926bc6a83057d5eb95c4b",
+    "started_at": 1795355364.7196665,
+    "finished_at": 1795355375.4525373,
+    "strikes": 0,
+    "reviewer": "opencode:hy4-flash-free",
+    "review": {
+      "reviewer": "opencode:hy4-flash-free",
+      "surface": "terminal",
+      "surface_digest": "835966e5238ca6ec4848a72ecd13159c63d246ebd41db89124f311efac3df104",
+      "snapshot_digest": "",
+      "snapshot_entries": 0,
+      "visual": true,
+      "reviewed_at": 1795355375.452539,
+      "scoped_paths": [
+        ".aikit/decisions.md",
+        "reports/aikit-observations.md",
+        "reports/architecture-audit.md",
+        "src/ui.rs",
+        "tests/ui.rs"
+      ],
+      "scoped_digest": "09ef185a1832205fffd9a094e47112cad98c4bf7d163d4510bffbad0c16cdde9"
+    },
+    "allowed_removals": [],
+    "allowed_tests": [
+      {
+        "path": "tests/ui.rs",
+        "reason": "regression test for the stable context window in the terminal renderer"
+      }
+    ],
+    "final_snapshot_digest": "",
+    "final_snapshot_entries": 0,
+    "surface_digest": "835966e5238ca6ec4848a72ecd13159c63d246ebd41db89124f311efac3df104",
+    "baseline_digest": "02fe2d5a9f94c81c67a6d45305b2c67898f497b94f04299f4ad1f9b498250923"
   }
 ]
