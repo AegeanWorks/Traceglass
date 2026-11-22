@@ -62,3 +62,57 @@ fn check_is_noninteractive_and_distinguishes_equal_different_and_error() {
         .unwrap()
         .contains("invalid trace"));
 }
+
+#[cfg(any(unix, windows))]
+#[test]
+fn non_unicode_path_reports_an_error_instead_of_panicking() {
+    #[cfg(unix)]
+    let path = {
+        use std::os::unix::ffi::OsStringExt;
+        std::ffi::OsString::from_vec(vec![b'x', 0xff])
+    };
+    #[cfg(windows)]
+    let path = {
+        use std::os::windows::ffi::OsStringExt;
+        std::ffi::OsString::from_wide(&[b'x' as u16, 0xd800])
+    };
+    let result = Command::new(env!("CARGO_BIN_EXE_traceglass"))
+        .arg("check")
+        .arg(path)
+        .arg("examples/after.trace")
+        .stdin(Stdio::null())
+        .output()
+        .unwrap();
+    assert_eq!(result.status.code(), Some(2));
+    assert!(result.stdout.is_empty());
+    assert!(!String::from_utf8_lossy(&result.stderr).contains("panicked"));
+}
+
+#[cfg(unix)]
+#[test]
+fn existing_non_unicode_path_can_be_compared() {
+    use std::os::unix::ffi::OsStringExt;
+    let path = std::env::temp_dir().join(std::ffi::OsString::from_vec(
+        format!("traceglass-{}-", std::process::id())
+            .bytes()
+            .chain([0xff])
+            .collect(),
+    ));
+    struct Cleanup(std::path::PathBuf);
+    impl Drop for Cleanup {
+        fn drop(&mut self) {
+            let _ = fs::remove_file(&self.0);
+        }
+    }
+    let _cleanup = Cleanup(path.clone());
+    fs::write(&path, "event\tvalue\n").unwrap();
+    let result = Command::new(env!("CARGO_BIN_EXE_traceglass"))
+        .arg("check")
+        .arg(&path)
+        .arg(&path)
+        .stdin(Stdio::null())
+        .output()
+        .unwrap();
+    assert_eq!(result.status.code(), Some(0));
+    assert_eq!(result.stdout, b"equal: 1 rows\n");
+}

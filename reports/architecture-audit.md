@@ -14,6 +14,10 @@
 
 `check` and `view` share the same bounded input loader and alignment. The pure `summarize` function counts aligned differences; the shell writes its result and maps equal, different and error outcomes to exit statuses 0, 1 and 2. An end-to-end test covers both comparisons and input errors with stdin closed. The comparison still uses the documented heuristic for repeated event names.
 
+## Native paths
+
+The shell now reads arguments as operating-system strings and passes file arguments as native paths into the file adapter; event parsing and alignment remain unchanged. A Windows test reproduces the former panic with an unpaired surrogate and verifies an ordinary input error instead. A Unix-only test exercises a real non-UTF-8 filename, but was not run on the Windows host.
+
 ## Portfolio comparison
 
 The public repository inventory was retrieved through GitHub's API on 2026-11-22 (one page of 100 was sufficient; page two was empty). Sextant already verifies state machines and checks golden traces for the first differing line. Traceglass compares generic program event traces and offers interactive inspection of bounded insertion/deletion-aware alignment. This distinguishes its workflow from Sextant; it is not a claim of global novelty.

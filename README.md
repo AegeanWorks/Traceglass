@@ -20,6 +20,8 @@ For scripts and CI, run `cargo run --quiet -- check before.trace after.trace`. I
 
 Alignment pairs events by name, so insertions do not necessarily shift every later match. Repeated names can produce multiple valid alignments; deterministic tie rules choose one. A difference does not establish its cause. Inputs are limited to 4 MiB each and alignment to one million matrix cells; long event fields are clipped to 120 characters in the view.
 
+File arguments use native operating-system paths, including non-Unicode filenames where the filesystem supports them. Trace file contents must still be UTF-8.
+
 ### What's Inside
 
 ```text

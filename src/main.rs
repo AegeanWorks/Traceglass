@@ -1,11 +1,12 @@
 use std::io::{self, BufRead, Read, Write};
+use std::path::Path;
 use std::process::ExitCode;
 use traceglass::input::read_trace;
 use traceglass::ui::{parse_action, render, summarize};
 use traceglass::{parse_trace, Comparison, Navigation};
 
 fn main() -> ExitCode {
-    let args: Vec<String> = std::env::args().skip(1).collect();
+    let args: Vec<_> = std::env::args_os().skip(1).collect();
     match args.as_slice() {
         [command] if command == "inventory" => {
             println!("cli|inventory|inventory\ncli|demo|demo --scripted\ncli|view|view LEFT RIGHT\ncli|check|check LEFT RIGHT");
@@ -15,26 +16,30 @@ fn main() -> ExitCode {
         [command, scripted, flag, value]
             if command == "demo" && scripted == "--scripted" && flag == "--seed" =>
         {
-            match value.parse::<u64>() {
-                Ok(seed) => demo(seed),
-                Err(_) => usage(),
+            match value.to_str().and_then(|text| text.parse::<u64>().ok()) {
+                Some(seed) => demo(seed),
+                None => usage(),
             }
         }
-        [command, left, right] if command == "view" => match view(left, right) {
-            Ok(()) => ExitCode::SUCCESS,
-            Err(error) => {
-                eprintln!("Error: {error}");
-                ExitCode::FAILURE
+        [command, left, right] if command == "view" => {
+            match view(Path::new(left), Path::new(right)) {
+                Ok(()) => ExitCode::SUCCESS,
+                Err(error) => {
+                    eprintln!("Error: {error}");
+                    ExitCode::FAILURE
+                }
             }
-        },
-        [command, left, right] if command == "check" => match check(left, right) {
-            Ok(false) => ExitCode::SUCCESS,
-            Ok(true) => ExitCode::from(1),
-            Err(error) => {
-                eprintln!("Error: {error}");
-                ExitCode::from(2)
+        }
+        [command, left, right] if command == "check" => {
+            match check(Path::new(left), Path::new(right)) {
+                Ok(false) => ExitCode::SUCCESS,
+                Ok(true) => ExitCode::from(1),
+                Err(error) => {
+                    eprintln!("Error: {error}");
+                    ExitCode::from(2)
+                }
             }
-        },
+        }
         _ => usage(),
     }
 }
@@ -55,10 +60,10 @@ fn usage() -> ExitCode {
     ExitCode::from(2)
 }
 
-fn load_comparison(left: &str, right: &str) -> Result<Comparison, String> {
+fn load_comparison(left: &Path, right: &Path) -> Result<Comparison, String> {
     const MAX_BYTES: usize = 4 * 1024 * 1024;
     const MAX_CELLS: usize = 1_000_000;
-    let load = |path: &str| {
+    let load = |path: &Path| {
         let file =
             std::fs::File::open(path).map_err(|error| format!("cannot open {path:?}: {error}"))?;
         read_trace(file, MAX_BYTES).map_err(|error| format!("{path:?}: {error}"))
@@ -67,7 +72,7 @@ fn load_comparison(left: &str, right: &str) -> Result<Comparison, String> {
         .map_err(|_| "traces exceed the alignment limit of 1,000,000 cells".to_string())
 }
 
-fn check(left: &str, right: &str) -> Result<bool, String> {
+fn check(left: &Path, right: &Path) -> Result<bool, String> {
     let (different, summary) = summarize(&load_comparison(left, right)?);
     io::stdout()
         .lock()
@@ -76,7 +81,7 @@ fn check(left: &str, right: &str) -> Result<bool, String> {
     Ok(different)
 }
 
-fn view(left: &str, right: &str) -> Result<(), String> {
+fn view(left: &Path, right: &Path) -> Result<(), String> {
     let comparison = load_comparison(left, right)?;
     let mut state = Navigation::new(&comparison);
     let stdin = io::stdin();

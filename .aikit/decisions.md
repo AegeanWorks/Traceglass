@@ -32,3 +32,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: Programmers need to use the same trace alignment in automated regression checks.
 - **Decision**: Add check LEFT RIGHT with stable plain-text summary; exit zero for equal, one for differences, and two for usage or input errors.
 - **Consequences**: The command reads each bounded snapshot once and uses the same alignment limit and tie rules as the interactive view; it does not launch a shell or mutate input files.
+
+### ADR-004: Preserve native path arguments
+- **Date**: 2026-11-22
+- **Status**: Accepted
+- **Context**: Decoding every argument as Unicode panics on valid operating-system path values.
+- **Decision**: Read operating-system arguments directly and pass file arguments as native paths; parse command and seed text explicitly.
+- **Consequences**: Input file contents remain UTF-8; inaccessible or invalid native paths produce normal errors and the documented command exit codes.

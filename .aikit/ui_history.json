@@ -224,5 +224,47 @@
     "final_snapshot_entries": 0,
     "surface_digest": "2750432bfb0e78f1c45037cdff0e0c79c57f242a87604bce98d42eb2ef4e70dd",
     "baseline_digest": "e267cc3082a5d2756dc3dee1d200c82740c84cc82b77ba907cd8ad61b38bbe61"
+  },
+  {
+    "schema": 1,
+    "surface": "terminal",
+    "mode": "backend",
+    "visual_change": false,
+    "changed_paths": [
+      "src/main.rs",
+      "tests/cli.rs"
+    ],
+    "no_visual_reason": "",
+    "baseline_commit": "fcbbc223111fdf57e44d04a347a94ed979833be5",
+    "contract_hash": "2d6d0e0dc5a2742c02d264765de1c4cf5593335bf3c926bc6a83057d5eb95c4b",
+    "started_at": 1795351024.8147912,
+    "finished_at": 1795351093.0751553,
+    "strikes": 0,
+    "reviewer": "",
+    "review": {
+      "reviewer": "",
+      "surface": "terminal",
+      "surface_digest": "2750432bfb0e78f1c45037cdff0e0c79c57f242a87604bce98d42eb2ef4e70dd",
+      "snapshot_digest": "",
+      "snapshot_entries": 0,
+      "visual": false,
+      "reviewed_at": 1795351093.075157,
+      "scoped_paths": [
+        "src/main.rs",
+        "tests/cli.rs"
+      ],
+      "scoped_digest": "d1b863606d2dbaf1e9b9d8f3ecf9a986ce8246fdb068589b6787565ecdef6a3f"
+    },
+    "allowed_removals": [],
+    "allowed_tests": [
+      {
+        "path": "tests/cli.rs",
+        "reason": "Verify native path and malformed command handling"
+      }
+    ],
+    "final_snapshot_digest": "",
+    "final_snapshot_entries": 0,
+    "surface_digest": "2750432bfb0e78f1c45037cdff0e0c79c57f242a87604bce98d42eb2ef4e70dd",
+    "baseline_digest": "2750432bfb0e78f1c45037cdff0e0c79c57f242a87604bce98d42eb2ef4e70dd"
   }
 ]
