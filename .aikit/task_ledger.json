@@ -1,13 +1,13 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "view-window",
+    "task_id": "publish",
     "last_phase": "phase 4",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1795355382.5263252,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1795355751.9793963,
     "owner": "opencode:hy4-flash-free",
-    "lease_until": 1795362582.5263252,
+    "lease_until": 1795362951.9793963,
     "started_by": "opencode:hy4-flash-free",
     "continuations": [],
     "workspaces": [
@@ -15,58 +15,9 @@
         "name": "traceglass",
         "path": "projects/traceglass"
       }
-    ],
-    "completed_at": 1795355420.3306165,
-    "completed_head": "d1af7e5efd96276b5bdcf88d1df61fd8dcf00b17",
-    "completed_tree": "c47550f793c115cf06dda22b933c61f175f1dfa3"
+    ]
   },
   "checkpoints": [
-    {
-      "task_id": "source-lines",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "Original source lines reviewed with insertion example; core and UI tests and project gates passed",
-      "files_affected": [
-        ".aikit/decisions.md",
-        ".aikit/task_ledger.json",
-        ".aikit/ui_history.json",
-        "README.md",
-        "reports/architecture-audit.md",
-        "src/lib.rs",
-        "src/ui.rs",
-        "tests/alignment.rs",
-        "tests/ui.rs",
-        ".aikit/task_ledger_archive.jsonl"
-      ],
-      "status": "in_progress",
-      "timestamp": 1795351423.6745257,
-      "timestamp_str": "2026-11-22 15:43:43",
-      "agent": "codex:traceglass",
-      "checklists": "passed",
-      "workspaces": [
-        {
-          "name": "traceglass",
-          "path": "projects/traceglass"
-        }
-      ]
-    },
-    {
-      "task_id": "source-lines",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'source-lines' completed successfully.",
-      "status": "completed",
-      "timestamp": 1795351461.0630949,
-      "timestamp_str": "2026-11-22 15:44:21",
-      "agent": "codex:traceglass",
-      "head": "7d0386dbd421cd672417dbddae59df8a6cc834b0",
-      "delivery": {
-        "roots": [
-          "."
-        ],
-        "forced": false
-      }
-    },
     {
       "task_id": "json-check",
       "phase": "phase 2",
@@ -478,6 +429,48 @@
         ],
         "forced": false
       }
+    },
+    {
+      "task_id": "publish",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/1] Approve brand assets, publish the repository and push",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1795355751.1394818,
+      "timestamp_str": "2026-11-22 16:55:51",
+      "agent": "opencode:hy4-flash-free",
+      "impact_assessment": {
+        "why": "The local-only project needed a remote before its delivered work could be pushed",
+        "benefits": "A private GitHub home for the project with reviewed brand assets and all commits uploaded",
+        "risks": "contract: repository visibility and README media block; dependency: gh auth; concurrency: catalogue writes in another project; state: media approval records",
+        "mitigation": "Structurally review both SVG assets, apply them, dry-run publish, then publish privately with all five gates green"
+      },
+      "plan_digest": "2467ada11ffc1ebacfa15a12054a168ee1fd69e862b19d8fcd5e1363d4873d75",
+      "workspaces": [
+        {
+          "name": "traceglass",
+          "path": "projects/traceglass"
+        }
+      ]
+    },
+    {
+      "task_id": "publish",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "Brand assets reviewed and applied; dry-run clean; 5/5 gates passed; repository published and branch in sync with origin/master",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1795355751.9793963,
+      "timestamp_str": "2026-11-22 16:55:51",
+      "agent": "opencode:hy4-flash-free",
+      "checklists": "passed",
+      "workspaces": [
+        {
+          "name": "traceglass",
+          "path": "projects/traceglass"
+        }
+      ]
     }
   ]
 }
