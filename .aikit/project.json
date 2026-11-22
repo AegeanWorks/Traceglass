@@ -1,29 +1,37 @@
 {
-  "schema": 1,
-  "name": "traceglass",
-  "test_command": null,
-  "topics": [
-    "aikit",
-    "aikit-integrated",
-    "source-available",
-    "aegean-license",
-    "commercial-license",
-    "developer-tools",
-    "rust"
-  ],
-  "gates": {},
-  "ui_required": false,
-  "map_coverage": "skip",
-  "review_required": false,
-  "mechanics_required": false,
-  "test_budget_ms": null,
-  "python_min": null,
-  "scratch_paths": [],
-  "gate_outputs": [],
-  "created": "2026-11-22",
-  "has_ui": false,
-  "ui_kind": "library",
-  "ui_evidence": [],
-  "ui_checked_at": "2026-11-22",
-  "ui_source": "detected"
+    "schema":  1,
+    "name":  "traceglass",
+    "test_command":  "cargo test",
+    "topics":  [
+                   "aikit",
+                   "aikit-integrated",
+                   "source-available",
+                   "aegean-license",
+                   "commercial-license",
+                   "developer-tools",
+                   "rust"
+               ],
+    "gates":  {
+
+              },
+    "ui_required":  false,
+    "map_coverage":  "skip",
+    "review_required":  false,
+    "mechanics_required":  false,
+    "test_budget_ms":  null,
+    "python_min":  null,
+    "scratch_paths":  [
+
+                      ],
+    "gate_outputs":  [
+
+                     ],
+    "created":  "2026-11-22",
+    "has_ui":  true,
+    "ui_kind":  "cli",
+    "ui_evidence":  [
+
+                    ],
+    "ui_checked_at":  "2026-11-22",
+    "ui_source":  "manual"
 }

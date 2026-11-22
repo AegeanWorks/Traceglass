@@ -1,0 +1,32 @@
+{
+  "schema": 1,
+  "name": "traceglass",
+  "repo": "Traceglass",
+  "has_ui": false,
+  "ui_kind": "library",
+  "palette": [
+    "#070c12",
+    "#141230",
+    "#6698f5",
+    "#df8ef5"
+  ],
+  "motif": "grid",
+  "layout": "center",
+  "assets": {
+    "logo": {
+      "path": "assets/logo.svg",
+      "status": "pending_review",
+      "commit": "",
+      "generated_at": "2026-11-22T14:15:53",
+      "review": null
+    },
+    "social_preview": {
+      "path": "assets/social-preview.svg",
+      "status": "pending_review",
+      "commit": "",
+      "generated_at": "2026-11-22T14:15:53",
+      "review": null
+    }
+  },
+  "screenshots": []
+}
