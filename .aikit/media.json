@@ -15,17 +15,31 @@
   "assets": {
     "logo": {
       "path": "assets/logo.svg",
-      "status": "pending_review",
+      "status": "approved",
       "commit": "",
       "generated_at": "2026-11-22T14:15:53",
-      "review": null
+      "review": {
+        "status": "approved",
+        "reviewer": "agent:opencode:hy4-flash-free",
+        "method": "structural",
+        "notes": "512x512 SVG with viewBox, accessible title/desc, 3x3 grid motif in the recorded palette, TR monogram and AegeanWorks mark; no credentials or external loads",
+        "score": 88,
+        "reviewed_at": "2026-11-22T16:54:15"
+      }
     },
     "social_preview": {
       "path": "assets/social-preview.svg",
-      "status": "pending_review",
+      "status": "approved",
       "commit": "",
       "generated_at": "2026-11-22T14:15:53",
-      "review": null
+      "review": {
+        "status": "approved",
+        "reviewer": "agent:opencode:hy4-flash-free",
+        "method": "structural",
+        "notes": "1280x640 SVG with viewBox, accessible title/desc, brand palette and grid motif, accurate product description, topic chips and AegeanWorks footer; no credentials or external loads",
+        "score": 90,
+        "reviewed_at": "2026-11-22T16:54:15"
+      }
     }
   },
   "screenshots": []
