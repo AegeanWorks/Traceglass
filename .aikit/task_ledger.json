@@ -1,13 +1,13 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "raw-lines",
+    "task_id": "prefix-alignment",
     "last_phase": "phase 4",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1795352271.7725203,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1795352672.2690578,
     "owner": "codex:traceglass",
-    "lease_until": 1795359471.7725203,
+    "lease_until": 1795359872.2690578,
     "started_by": "codex:traceglass",
     "continuations": [],
     "workspaces": [
@@ -15,52 +15,9 @@
         "name": "traceglass",
         "path": "projects/traceglass"
       }
-    ],
-    "completed_at": 1795352313.4717963,
-    "completed_head": "9903076378b672ace9fede7dfce0d805b85d1b8b",
-    "completed_tree": "d57140a48a60df5bb9eebbe2d7a76f9ea9f1751f"
+    ]
   },
   "checkpoints": [
-    {
-      "task_id": "audit-final",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "Audit and profile notes finalized; all project gates passed",
-      "files_affected": [
-        ".aikit/task_ledger.json",
-        "README.md",
-        "reports/aikit-observations.md",
-        "reports/architecture-audit.md"
-      ],
-      "status": "in_progress",
-      "timestamp": 1795347652.8906558,
-      "timestamp_str": "2026-11-22 14:40:52",
-      "agent": "codex:traceglass",
-      "checklists": "passed",
-      "workspaces": [
-        {
-          "name": "traceglass",
-          "path": "projects/traceglass"
-        }
-      ]
-    },
-    {
-      "task_id": "audit-final",
-      "phase": "completed",
-      "phase_num": 5,
-      "description": "Task 'audit-final' completed successfully.",
-      "status": "completed",
-      "timestamp": 1795347679.212656,
-      "timestamp_str": "2026-11-22 14:41:19",
-      "agent": "codex:traceglass",
-      "head": "82bdf3987fb3e52441844f35c2dc86bd33c309e3",
-      "delivery": {
-        "roots": [
-          "."
-        ],
-        "forced": false
-      }
-    },
     {
       "task_id": "ci-check",
       "phase": "phase 2",
@@ -474,6 +431,59 @@
         ],
         "forced": false
       }
+    },
+    {
+      "task_id": "prefix-alignment",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/1] Align identical leading events without building their matrix cells",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1795352406.1171417,
+      "timestamp_str": "2026-11-22 16:00:06",
+      "agent": "codex:traceglass",
+      "impact_assessment": {
+        "why": "Long traces with a shared prefix are rejected even when the remaining comparison is small",
+        "benefits": "Compare common long traces while retaining bounded matrix allocation and existing tie semantics",
+        "risks": "contract: alignment ordering and cell budget; dependency: none; concurrency: immutable inputs; state: source index offsets",
+        "mitigation": "Keep the existing full-matrix align API, compare optimized results exhaustively against it on small cases, test long and over-budget residual traces"
+      },
+      "plan_digest": "37d2be61c6c57f9b89ab16a0a5a973b98ed445cefb0dd46aa4842b77c1047d1c",
+      "workspaces": [
+        {
+          "name": "traceglass",
+          "path": "projects/traceglass"
+        }
+      ]
+    },
+    {
+      "task_id": "prefix-alignment",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "Long prefix, residual limit, tie equivalence and CLI locations tested; all project gates passed",
+      "files_affected": [
+        ".aikit/decisions.md",
+        ".aikit/task_ledger.json",
+        ".aikit/task_ledger_archive.jsonl",
+        ".aikit/ui_history.json",
+        "README.md",
+        "reports/architecture-audit.md",
+        "src/alignment.rs",
+        "src/lib.rs",
+        "tests/alignment.rs",
+        "tests/cli.rs"
+      ],
+      "status": "in_progress",
+      "timestamp": 1795352672.2690578,
+      "timestamp_str": "2026-11-22 16:04:32",
+      "agent": "codex:traceglass",
+      "checklists": "passed",
+      "workspaces": [
+        {
+          "name": "traceglass",
+          "path": "projects/traceglass"
+        }
+      ]
     }
   ]
 }

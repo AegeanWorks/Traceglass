@@ -28,6 +28,10 @@ The shell now reads arguments as operating-system strings and passes file argume
 
 `Comparison::source_indices` maps aligned rows to zero-based positions in the immutable input snapshots, including absent sides. The pure terminal renderer displays those positions as one-based file lines; a parsed event corresponds to exactly one input line. Tests cover insertions, removals, positional comparisons, and out-of-range indices.
 
+## Shared prefix alignment
+
+`Comparison::try_aligned` matches equal leading events before applying the matrix-cell budget to the remaining slices. It then offsets the residual source indices. The public `align` function remains the full-matrix reference with its original limit. Small-trace exhaustive comparisons check deterministic tie behavior; long-prefix and over-budget residual tests cover the new boundary. The optimization does not help traces whose first difference is near the beginning.
+
 ## Portfolio comparison
 
 The public repository inventory was retrieved through GitHub's API on 2026-11-22 (one page of 100 was sufficient; page two was empty). Sextant already verifies state machines and checks golden traces for the first differing line. Traceglass compares generic program event traces and offers interactive inspection of bounded insertion/deletion-aware alignment. This distinguishes its workflow from Sextant; it is not a claim of global novelty.

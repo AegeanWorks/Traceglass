@@ -61,3 +61,63 @@ fn source_indices_follow_each_original_trace_across_insertions_and_removals() {
     let positional = Comparison::new(parse_trace("a\t1\nb\t2\n").unwrap(), vec![]);
     assert_eq!(positional.source_indices(1), Some((Some(1), None)));
 }
+
+#[test]
+fn long_identical_prefix_does_not_consume_matrix_budget() {
+    let left = parse_trace(&"event\tstable\n".repeat(1500)).unwrap();
+    let mut right = left.clone();
+    right.extend(parse_trace("extra\tvalue\n").unwrap());
+    let comparison = Comparison::try_aligned(left, right, 2).unwrap();
+    assert_eq!(comparison.len(), 1501);
+    assert_eq!(
+        comparison.source_indices(1499),
+        Some((Some(1499), Some(1499)))
+    );
+    assert_eq!(comparison.source_indices(1500), Some((None, Some(1500))));
+}
+
+#[test]
+fn remaining_unmatched_matrix_is_still_bounded() {
+    let left = parse_trace("same\t1\na\t1\nb\t1\n").unwrap();
+    let right = parse_trace("same\t1\nc\t1\nd\t1\n").unwrap();
+    assert_eq!(
+        Comparison::try_aligned(left, right, 8),
+        Err(AlignmentError::TooManyCells)
+    );
+}
+
+#[test]
+fn prefix_optimization_preserves_full_matrix_ties_for_small_traces() {
+    let symbols = parse_trace("a\t1\na\t2\nb\t1\n").unwrap();
+    let mut traces = vec![Vec::new()];
+    for _ in 0..3 {
+        let previous = traces.clone();
+        for trace in previous {
+            for event in &symbols {
+                let mut next = trace.clone();
+                next.push(event.clone());
+                traces.push(next);
+            }
+        }
+    }
+    for left in &traces {
+        for right in &traces {
+            let expected = align(left, right, 100).unwrap();
+            let comparison = Comparison::try_aligned(left.clone(), right.clone(), 100).unwrap();
+            let actual: Vec<_> = (0..comparison.len())
+                .map(|i| comparison.source_indices(i).unwrap())
+                .collect();
+            let expected: Vec<_> = expected
+                .iter()
+                .map(|row| match row {
+                    AlignedRow::Equal { left, right } | AlignedRow::Changed { left, right } => {
+                        (Some(*left), Some(*right))
+                    }
+                    AlignedRow::LeftOnly { left } => (Some(*left), None),
+                    AlignedRow::RightOnly { right } => (None, Some(*right)),
+                })
+                .collect();
+            assert_eq!(actual, expected, "left={left:?}, right={right:?}");
+        }
+    }
+}

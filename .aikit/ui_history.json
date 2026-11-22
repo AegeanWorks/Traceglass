@@ -472,5 +472,55 @@
     "final_snapshot_entries": 0,
     "surface_digest": "9981254be7e4b39488d16c71475fac73f28bf1f1f99fec6f6305c8c85a3bebbc",
     "baseline_digest": "9981254be7e4b39488d16c71475fac73f28bf1f1f99fec6f6305c8c85a3bebbc"
+  },
+  {
+    "schema": 1,
+    "surface": "terminal",
+    "mode": "backend",
+    "visual_change": false,
+    "changed_paths": [
+      "src/alignment.rs",
+      "src/lib.rs",
+      "tests/alignment.rs",
+      "tests/cli.rs"
+    ],
+    "no_visual_reason": "",
+    "baseline_commit": "664a3c0ac8cefadf01ecff5bb3e90864e73108b5",
+    "contract_hash": "2d6d0e0dc5a2742c02d264765de1c4cf5593335bf3c926bc6a83057d5eb95c4b",
+    "started_at": 1795352411.9779353,
+    "finished_at": 1795352582.8013682,
+    "strikes": 0,
+    "reviewer": "",
+    "review": {
+      "reviewer": "",
+      "surface": "terminal",
+      "surface_digest": "9981254be7e4b39488d16c71475fac73f28bf1f1f99fec6f6305c8c85a3bebbc",
+      "snapshot_digest": "",
+      "snapshot_entries": 0,
+      "visual": false,
+      "reviewed_at": 1795352582.8013709,
+      "scoped_paths": [
+        "src/alignment.rs",
+        "src/lib.rs",
+        "tests/alignment.rs",
+        "tests/cli.rs"
+      ],
+      "scoped_digest": "acf8e7defdd4350311d60c4ae9dc9ec45180af58e5dbacfda615cdb7c2adb674"
+    },
+    "allowed_removals": [],
+    "allowed_tests": [
+      {
+        "path": "tests/alignment.rs",
+        "reason": "Verify long prefixes and equivalent deterministic alignment"
+      },
+      {
+        "path": "tests/cli.rs",
+        "reason": "Exercise long shared-prefix traces through the real CLI"
+      }
+    ],
+    "final_snapshot_digest": "",
+    "final_snapshot_entries": 0,
+    "surface_digest": "9981254be7e4b39488d16c71475fac73f28bf1f1f99fec6f6305c8c85a3bebbc",
+    "baseline_digest": "9981254be7e4b39488d16c71475fac73f28bf1f1f99fec6f6305c8c85a3bebbc"
   }
 ]

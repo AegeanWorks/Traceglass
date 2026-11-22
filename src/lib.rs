@@ -82,7 +82,7 @@ impl Comparison {
         right: Vec<Event>,
         max_cells: usize,
     ) -> Result<Self, AlignmentError> {
-        let alignment = align(&left, &right, max_cells)?;
+        let alignment = alignment::align_prefixed(&left, &right, max_cells)?;
         Ok(Self {
             left,
             right,

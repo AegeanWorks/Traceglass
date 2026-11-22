@@ -67,3 +67,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: Ordinary programmer logs are not necessarily tab-separated event records.
 - **Decision**: Add explicit --lines mode to view and check, parsing each UTF-8 line as an event named line using the existing bounded input adapter and alignment.
 - **Consequences**: Structured traces remain the default; raw lines preserve blanks but normalize line terminators, and repeated lines can have ambiguous optimal alignments. JSON and piped check input remain supported.
+
+### ADR-009: Bound the residual alignment matrix after a shared prefix
+- **Date**: 2026-11-22
+- **Status**: Accepted
+- **Context**: The full matrix limit rejects long traces even when they share a long identical beginning.
+- **Decision**: Comparison matches identical leading events first, aligns the remaining slices with the existing matrix limit, and offsets source indices; the public full-matrix align function remains unchanged.
+- **Consequences**: Long common-prefix traces can be compared without increasing the matrix limit. Early differences can still exceed it. Tests compare deterministic results against the full-matrix reference.

@@ -14,6 +14,39 @@ pub enum AlignmentError {
     TooManyCells,
 }
 
+/// Match a shared equal prefix before allocating the bounded residual matrix.
+pub(crate) fn align_prefixed(
+    left: &[Event],
+    right: &[Event],
+    max_cells: usize,
+) -> Result<Vec<AlignedRow>, AlignmentError> {
+    let prefix = left.iter().zip(right).take_while(|(a, b)| a == b).count();
+    let tail = align(&left[prefix..], &right[prefix..], max_cells)?;
+    let mut result: Vec<_> = (0..prefix)
+        .map(|index| AlignedRow::Equal {
+            left: index,
+            right: index,
+        })
+        .collect();
+    result.extend(tail.into_iter().map(|row| match row {
+        AlignedRow::Equal { left, right } => AlignedRow::Equal {
+            left: left + prefix,
+            right: right + prefix,
+        },
+        AlignedRow::Changed { left, right } => AlignedRow::Changed {
+            left: left + prefix,
+            right: right + prefix,
+        },
+        AlignedRow::LeftOnly { left } => AlignedRow::LeftOnly {
+            left: left + prefix,
+        },
+        AlignedRow::RightOnly { right } => AlignedRow::RightOnly {
+            right: right + prefix,
+        },
+    }));
+    Ok(result)
+}
+
 /// Find a minimum-cost alignment. Equal names may pair with different values;
 /// unmatched names are insertions/removals. Ties prefer pairing, then removal.
 pub fn align(

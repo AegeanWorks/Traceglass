@@ -174,6 +174,33 @@ fn raw_lines_work_with_files_pipes_and_json() {
     assert!(output.contains("R line 2: line: retry"));
 }
 
+#[test]
+fn long_shared_prefix_can_be_compared_with_json_locations() {
+    let dir = std::env::temp_dir().join(format!("traceglass-prefix-{}", std::process::id()));
+    fs::create_dir_all(&dir).unwrap();
+    struct Cleanup(std::path::PathBuf);
+    impl Drop for Cleanup {
+        fn drop(&mut self) {
+            let _ = fs::remove_dir_all(&self.0);
+        }
+    }
+    let _cleanup = Cleanup(dir.clone());
+    let left = dir.join("left.trace");
+    let right = dir.join("right.trace");
+    let common = "event\tstable\n".repeat(1500);
+    fs::write(&left, &common).unwrap();
+    fs::write(&right, format!("{common}extra\tvalue\n")).unwrap();
+    let output = Command::new(env!("CARGO_BIN_EXE_traceglass"))
+        .args(["check", "--json"])
+        .arg(&left)
+        .arg(&right)
+        .stdin(Stdio::null())
+        .output()
+        .unwrap();
+    assert_eq!(output.status.code(), Some(1));
+    assert_eq!(output.stdout, b"{\"version\":1,\"equal\":false,\"rows\":1501,\"differences\":1,\"first\":{\"row\":1501,\"left_line\":null,\"right_line\":1501}}\n");
+}
+
 #[cfg(any(unix, windows))]
 #[test]
 fn non_unicode_path_reports_an_error_instead_of_panicking() {
