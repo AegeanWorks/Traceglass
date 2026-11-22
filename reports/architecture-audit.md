@@ -18,6 +18,10 @@
 
 The shell now reads arguments as operating-system strings and passes file arguments as native paths into the file adapter; event parsing and alignment remain unchanged. A Windows test reproduces the former panic with an unpaired surrogate and verifies an ordinary input error instead. A Unix-only test exercises a real non-UTF-8 filename, but was not run on the Windows host.
 
+## Source locations
+
+`Comparison::source_indices` maps aligned rows to zero-based positions in the immutable input snapshots, including absent sides. The pure terminal renderer displays those positions as one-based file lines; a parsed event corresponds to exactly one input line. Tests cover insertions, removals, positional comparisons, and out-of-range indices.
+
 ## Portfolio comparison
 
 The public repository inventory was retrieved through GitHub's API on 2026-11-22 (one page of 100 was sufficient; page two was empty). Sextant already verifies state machines and checks golden traces for the first differing line. Traceglass compares generic program event traces and offers interactive inspection of bounded insertion/deletion-aware alignment. This distinguishes its workflow from Sextant; it is not a claim of global novelty.

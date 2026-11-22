@@ -39,3 +39,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: Decoding every argument as Unicode panics on valid operating-system path values.
 - **Decision**: Read operating-system arguments directly and pass file arguments as native paths; parse command and seed text explicitly.
 - **Consequences**: Input file contents remain UTF-8; inaccessible or invalid native paths produce normal errors and the documented command exit codes.
+
+### ADR-005: Expose aligned source positions
+- **Date**: 2026-11-22
+- **Status**: Accepted
+- **Context**: An aligned row number may not match either input file after an insertion or removal.
+- **Decision**: Expose zero-based source event indices for each comparison row and render existing events with one-based input line numbers.
+- **Consequences**: The trace format must continue to map one parsed event to one input line; absent sides have no source index. CI summary wording remains unchanged.

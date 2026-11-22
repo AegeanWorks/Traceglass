@@ -1,13 +1,13 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "native-paths",
+    "task_id": "source-lines",
     "last_phase": "phase 4",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1795351135.6137671,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1795351423.6745257,
     "owner": "codex:traceglass",
-    "lease_until": 1795358335.6137671,
+    "lease_until": 1795358623.6745257,
     "started_by": "codex:traceglass",
     "continuations": [],
     "workspaces": [
@@ -15,72 +15,9 @@
         "name": "traceglass",
         "path": "projects/traceglass"
       }
-    ],
-    "completed_at": 1795351166.9869711,
-    "completed_head": "5d1aa495b38f618d550d65b79f53ad38d8c99223",
-    "completed_tree": "526bbea5372e4116bc7ab9dbe4d10ca33b0d94f4"
+    ]
   },
   "checkpoints": [
-    {
-      "task_id": "build",
-      "phase": "phase 2",
-      "phase_num": 2,
-      "description": "[1/2] Build a Rust trace comparison core and terminal UI; [2/2] audit, verify and document delivery",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1795346174.222131,
-      "timestamp_str": "2026-11-22 14:16:14",
-      "agent": "codex:traceglass",
-      "impact_assessment": {
-        "why": "Programmers need to locate divergences between reproducible runs",
-        "benefits": "Local inspectable comparison with no network dependency",
-        "risks": "contract: trace ambiguity; dependency: toolchain availability; concurrency: concurrent reads; state: invalid UI transitions",
-        "mitigation": "Define a strict format, use Rust standard library, read snapshots once, test pure transitions"
-      },
-      "plan_digest": "ea862c359a7b9a39836e34c7dd2fddf29bc78ff3e3a2e93ec3d30127a5c41109",
-      "workspaces": [
-        {
-          "name": "traceglass",
-          "path": "projects/traceglass"
-        }
-      ]
-    },
-    {
-      "task_id": "build",
-      "phase": "phase 3",
-      "phase_num": 3,
-      "description": "Trace parsing and first-difference core added; cargo test blocked by missing MSVC linker",
-      "files_affected": [
-        ".aikit/decisions.md",
-        ".aikit/guidelines.md",
-        ".aikit/project.json",
-        ".aikit/task_ledger.json",
-        ".gitignore",
-        ".aikit/media.json",
-        ".aikit/ui.json",
-        "Cargo.lock",
-        "Cargo.toml",
-        "assets/logo.svg",
-        "assets/social-preview.svg",
-        "reports/aikit-observations.md",
-        "src/lib.rs",
-        "tests/comparison.rs"
-      ],
-      "status": "in_progress",
-      "timestamp": 1795346251.5861611,
-      "timestamp_str": "2026-11-22 14:17:31",
-      "agent": "codex:traceglass",
-      "handoff": {
-        "next": "locate a usable Rust linker, finish core and UI, run AIKit gates",
-        "failed": "cargo test cannot find link.exe"
-      },
-      "workspaces": [
-        {
-          "name": "traceglass",
-          "path": "projects/traceglass"
-        }
-      ]
-    },
     {
       "task_id": "build",
       "phase": "phase 3",
@@ -584,6 +521,59 @@
         ],
         "forced": false
       }
+    },
+    {
+      "task_id": "source-lines",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/1] Show source line numbers for aligned events in the terminal view",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1795351239.7563744,
+      "timestamp_str": "2026-11-22 15:40:39",
+      "agent": "codex:traceglass",
+      "impact_assessment": {
+        "why": "Aligned row numbers diverge from file line numbers after insertions and removals",
+        "benefits": "Programmers can locate corresponding events in either source trace",
+        "risks": "contract: index versus line conventions; dependency: none; concurrency: snapshots fixed; state: missing-side mappings",
+        "mitigation": "Expose zero-based source indices in the pure core, render one-based lines, test insertion, deletion and missing rows"
+      },
+      "plan_digest": "8ddb8bb2018f5489c884a6e0e8cea566cd5f9d0536bdc26022c20376e2de2816",
+      "workspaces": [
+        {
+          "name": "traceglass",
+          "path": "projects/traceglass"
+        }
+      ]
+    },
+    {
+      "task_id": "source-lines",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "Original source lines reviewed with insertion example; core and UI tests and project gates passed",
+      "files_affected": [
+        ".aikit/decisions.md",
+        ".aikit/task_ledger.json",
+        ".aikit/ui_history.json",
+        "README.md",
+        "reports/architecture-audit.md",
+        "src/lib.rs",
+        "src/ui.rs",
+        "tests/alignment.rs",
+        "tests/ui.rs",
+        ".aikit/task_ledger_archive.jsonl"
+      ],
+      "status": "in_progress",
+      "timestamp": 1795351423.6745257,
+      "timestamp_str": "2026-11-22 15:43:43",
+      "agent": "codex:traceglass",
+      "checklists": "passed",
+      "workspaces": [
+        {
+          "name": "traceglass",
+          "path": "projects/traceglass"
+        }
+      ]
     }
   ]
 }

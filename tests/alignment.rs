@@ -47,3 +47,17 @@ fn navigation_uses_aligned_rows_after_an_insertion() {
     assert_eq!(comparison.row(1).unwrap().0, None);
     assert!(!comparison.differs(2));
 }
+
+#[test]
+fn source_indices_follow_each_original_trace_across_insertions_and_removals() {
+    let left = parse_trace("open\t1\nremoved\t2\nclose\t3\n").unwrap();
+    let right = parse_trace("open\t1\nadded\t2\nclose\t3\n").unwrap();
+    let comparison = Comparison::try_aligned(left, right, 100).unwrap();
+    assert_eq!(comparison.source_indices(0), Some((Some(0), Some(0))));
+    assert_eq!(comparison.source_indices(1), Some((Some(1), None)));
+    assert_eq!(comparison.source_indices(2), Some((None, Some(1))));
+    assert_eq!(comparison.source_indices(3), Some((Some(2), Some(2))));
+    assert_eq!(comparison.source_indices(4), None);
+    let positional = Comparison::new(parse_trace("a\t1\nb\t2\n").unwrap(), vec![]);
+    assert_eq!(positional.source_indices(1), Some((Some(1), None)));
+}

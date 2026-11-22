@@ -12,7 +12,7 @@ Traceglass is a local Rust terminal workbench for comparing ordered execution tr
   cargo test
   ```
 
-Each trace consists of UTF-8 lines containing an event name, a tab, and an event value. Run `cargo run -- view before.trace after.trace` to inspect a pair. Use `p` and `n` to move one row, `P` and `N` to jump between differences, and `q` to quit; press Enter after each command. Closing standard input also exits.
+Each trace consists of UTF-8 lines containing an event name, a tab, and an event value. Run `cargo run -- view before.trace after.trace` to inspect a pair. Each event shows its original one-based file line; the number at the left of the row is its aligned position. Use `p` and `n` to move one row, `P` and `N` to jump between differences, and `q` to quit; press Enter after each command. Closing standard input also exits.
 
 Try `cargo run -- view examples/before.trace examples/after.trace`, then enter `N` to jump to the inserted retry event. For a changed row, the view identifies the first differing character even when it lies beyond the clipped preview.
 

@@ -43,3 +43,15 @@ fn changed_values_explain_a_difference_beyond_the_clipped_prefix() {
     assert!(output.contains("first value difference at character 131"));
     assert!(output.contains("L A | R B"));
 }
+
+#[test]
+fn view_shows_original_line_numbers_after_an_insertion() {
+    let left = parse_trace("open\t1\nclose\t3\n").unwrap();
+    let right = parse_trace("open\t1\nlog\textra\nclose\t3\n").unwrap();
+    let comparison = Comparison::try_aligned(left, right, 100).unwrap();
+    let output = render(&comparison, Navigation::new(&comparison));
+    assert!(output.contains("L line 2: close: 3"));
+    assert!(output.contains("R line 3: close: 3"));
+    assert!(output.contains("L (missing)"));
+    assert!(output.contains("R line 2: log: extra"));
+}

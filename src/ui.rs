@@ -52,10 +52,15 @@ fn safe(text: &str) -> String {
     output
 }
 
-fn event(event: Option<&Event>) -> String {
-    match event {
-        Some(event) => format!("{}: {}", safe(&event.name), safe(&event.value)),
-        None => "(missing)".to_string(),
+fn event(event: Option<&Event>, source: Option<usize>) -> String {
+    match (event, source) {
+        (Some(event), Some(index)) => format!(
+            "line {}: {}: {}",
+            index + 1,
+            safe(&event.name),
+            safe(&event.value)
+        ),
+        _ => "(missing)".to_string(),
     }
 }
 
@@ -90,6 +95,7 @@ pub fn render(comparison: &Comparison, navigation: Navigation) -> String {
         let end = selected.saturating_add(4).min(comparison.len());
         for index in start..end {
             let (left, right) = comparison.row(index).expect("bounded row");
+            let (left_index, right_index) = comparison.source_indices(index).expect("bounded row");
             let kind = if left.is_none() {
                 "inserted"
             } else if right.is_none() {
@@ -103,8 +109,8 @@ pub fn render(comparison: &Comparison, navigation: Navigation) -> String {
             out.push_str(&format!(
                 "{cursor} {:>5} [{kind}]\n        L {}\n        R {}\n",
                 index + 1,
-                event(left),
-                event(right)
+                event(left, left_index),
+                event(right, right_index)
             ));
             if index == selected {
                 if let (Some(left), Some(right)) = (left, right) {

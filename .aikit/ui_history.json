@@ -266,5 +266,61 @@
     "final_snapshot_entries": 0,
     "surface_digest": "2750432bfb0e78f1c45037cdff0e0c79c57f242a87604bce98d42eb2ef4e70dd",
     "baseline_digest": "2750432bfb0e78f1c45037cdff0e0c79c57f242a87604bce98d42eb2ef4e70dd"
+  },
+  {
+    "schema": 1,
+    "surface": "terminal",
+    "mode": "visual",
+    "visual_change": true,
+    "changed_paths": [
+      ".aikit/decisions.md",
+      "README.md",
+      "reports/architecture-audit.md",
+      "src/lib.rs",
+      "src/ui.rs",
+      "tests/alignment.rs",
+      "tests/ui.rs"
+    ],
+    "no_visual_reason": "",
+    "baseline_commit": "24dc0049826f7eec1c91ba32a9a3dd8fd81f3085",
+    "contract_hash": "2d6d0e0dc5a2742c02d264765de1c4cf5593335bf3c926bc6a83057d5eb95c4b",
+    "started_at": 1795351245.2672193,
+    "finished_at": 1795351392.7221282,
+    "strikes": 0,
+    "reviewer": "codex:traceglass",
+    "review": {
+      "reviewer": "codex:traceglass",
+      "surface": "terminal",
+      "surface_digest": "e7ce907a46ec500a87d3ac9de0a21e2c92616ec00c59cd65e8a0b6160f443624",
+      "snapshot_digest": "",
+      "snapshot_entries": 0,
+      "visual": true,
+      "reviewed_at": 1795351392.7221298,
+      "scoped_paths": [
+        ".aikit/decisions.md",
+        "README.md",
+        "reports/architecture-audit.md",
+        "src/lib.rs",
+        "src/ui.rs",
+        "tests/alignment.rs",
+        "tests/ui.rs"
+      ],
+      "scoped_digest": "00c0b0b7f67b01935c3c3427c89a4a60c1cca10f24c166f816e13dd269cb3c82"
+    },
+    "allowed_removals": [],
+    "allowed_tests": [
+      {
+        "path": "tests/alignment.rs",
+        "reason": "Test source positions across insertions and deletions"
+      },
+      {
+        "path": "tests/ui.rs",
+        "reason": "Verify original line numbers in the rendered terminal view"
+      }
+    ],
+    "final_snapshot_digest": "",
+    "final_snapshot_entries": 0,
+    "surface_digest": "e7ce907a46ec500a87d3ac9de0a21e2c92616ec00c59cd65e8a0b6160f443624",
+    "baseline_digest": "2750432bfb0e78f1c45037cdff0e0c79c57f242a87604bce98d42eb2ef4e70dd"
   }
 ]

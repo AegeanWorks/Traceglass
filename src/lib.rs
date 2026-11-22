@@ -50,7 +50,7 @@ pub fn compare(left: &[Event], right: &[Event]) -> Option<Difference> {
     }
 }
 
-/// Two immutable snapshots, compared by position rather than inferred causality.
+/// Two immutable snapshots, compared by position or alignment without inferred causality.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Comparison {
     left: Vec<Event>,
@@ -89,17 +89,32 @@ impl Comparison {
         self.len() == 0
     }
 
-    pub fn row(&self, index: usize) -> Option<(Option<&Event>, Option<&Event>)> {
+    /// Return zero-based source event indices for an aligned or positional row.
+    pub fn source_indices(&self, index: usize) -> Option<(Option<usize>, Option<usize>)> {
         if let Some(rows) = &self.alignment {
             return rows.get(index).map(|row| match *row {
                 AlignedRow::Equal { left, right } | AlignedRow::Changed { left, right } => {
-                    (self.left.get(left), self.right.get(right))
+                    (Some(left), Some(right))
                 }
-                AlignedRow::LeftOnly { left } => (self.left.get(left), None),
-                AlignedRow::RightOnly { right } => (None, self.right.get(right)),
+                AlignedRow::LeftOnly { left } => (Some(left), None),
+                AlignedRow::RightOnly { right } => (None, Some(right)),
             });
         }
-        (index < self.len()).then(|| (self.left.get(index), self.right.get(index)))
+        (index < self.len()).then(|| {
+            (
+                (index < self.left.len()).then_some(index),
+                (index < self.right.len()).then_some(index),
+            )
+        })
+    }
+
+    pub fn row(&self, index: usize) -> Option<(Option<&Event>, Option<&Event>)> {
+        self.source_indices(index).map(|(left, right)| {
+            (
+                left.and_then(|i| self.left.get(i)),
+                right.and_then(|i| self.right.get(i)),
+            )
+        })
     }
 
     pub fn differs(&self, index: usize) -> bool {
