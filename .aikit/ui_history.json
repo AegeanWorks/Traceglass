@@ -1,0 +1,126 @@
+[
+  {
+    "schema": 1,
+    "surface": "terminal",
+    "mode": "visual",
+    "visual_change": true,
+    "changed_paths": [
+      ".aikit/guidelines.md",
+      "Cargo.toml",
+      "README.md",
+      "src/lib.rs",
+      "src/main.rs",
+      "src/ui.rs",
+      "tests/cli.rs",
+      "tests/ui.rs"
+    ],
+    "no_visual_reason": "",
+    "baseline_commit": "b2a6403fcc69cba58261b99293dfcf200dda2169",
+    "contract_hash": "2d6d0e0dc5a2742c02d264765de1c4cf5593335bf3c926bc6a83057d5eb95c4b",
+    "started_at": 1795346847.041313,
+    "finished_at": 1795347047.1217582,
+    "strikes": 1,
+    "reviewer": "codex:traceglass",
+    "review": {
+      "reviewer": "codex:traceglass",
+      "surface": "terminal",
+      "surface_digest": "b39b8102b9359ae6a5f9da32b17faa4ab60b8810adddf32e8166d383849499f3",
+      "snapshot_digest": "",
+      "snapshot_entries": 0,
+      "visual": true,
+      "reviewed_at": 1795347047.1217594,
+      "scoped_paths": [
+        ".aikit/guidelines.md",
+        "Cargo.toml",
+        "README.md",
+        "src/lib.rs",
+        "src/main.rs",
+        "src/ui.rs",
+        "tests/cli.rs",
+        "tests/ui.rs"
+      ],
+      "scoped_digest": "afa4f842f95cb65eadb0370cd163c1dfd350befbc7c44e4d66c801b700d9ae8a"
+    },
+    "allowed_removals": [],
+    "allowed_tests": [
+      {
+        "path": "tests/ui.rs",
+        "reason": "Verify rendering and navigation commands for terminal interface"
+      },
+      {
+        "path": "README.md",
+        "reason": "Document interactive controls and usage"
+      },
+      {
+        "path": "tests/cli.rs",
+        "reason": "Exercise file loading, interactive input and error handling end to end"
+      }
+    ],
+    "final_snapshot_digest": "",
+    "final_snapshot_entries": 0,
+    "surface_digest": "b39b8102b9359ae6a5f9da32b17faa4ab60b8810adddf32e8166d383849499f3",
+    "baseline_digest": ""
+  },
+  {
+    "schema": 1,
+    "surface": "terminal",
+    "mode": "visual",
+    "visual_change": true,
+    "changed_paths": [
+      ".aikit/guidelines.md",
+      "Cargo.toml",
+      "README.md",
+      "reports/aikit-observations.md",
+      "reports/architecture-audit.md",
+      "src/lib.rs",
+      "src/main.rs",
+      "src/ui.rs",
+      "tests/cli.rs",
+      "tests/ui.rs"
+    ],
+    "no_visual_reason": "",
+    "baseline_commit": "b2a6403fcc69cba58261b99293dfcf200dda2169",
+    "contract_hash": "2d6d0e0dc5a2742c02d264765de1c4cf5593335bf3c926bc6a83057d5eb95c4b",
+    "started_at": 1795347174.8327813,
+    "finished_at": 1795347355.919618,
+    "strikes": 2,
+    "reviewer": "codex:traceglass",
+    "review": {
+      "reviewer": "codex:traceglass",
+      "surface": "terminal",
+      "surface_digest": "b39b8102b9359ae6a5f9da32b17faa4ab60b8810adddf32e8166d383849499f3",
+      "snapshot_digest": "",
+      "snapshot_entries": 0,
+      "visual": true,
+      "reviewed_at": 1795347355.9196196,
+      "scoped_paths": [
+        ".aikit/guidelines.md",
+        "Cargo.toml",
+        "README.md",
+        "reports/aikit-observations.md",
+        "reports/architecture-audit.md",
+        "src/lib.rs",
+        "src/main.rs",
+        "src/ui.rs",
+        "tests/cli.rs",
+        "tests/ui.rs"
+      ],
+      "scoped_digest": "3c15325b79a1c92ebde231d93a9a3bbd3c0cbabe2dc2f29d777791e740598e44"
+    },
+    "allowed_removals": [],
+    "allowed_tests": [
+      {
+        "path": "tests/ui.rs",
+        "reason": "Verify the terminal interface"
+      },
+      {
+        "path": "tests/cli.rs",
+        "reason": "Verify the terminal interface"
+      }
+    ],
+    "final_snapshot_digest": "",
+    "final_snapshot_entries": 0,
+    "surface_digest": "b39b8102b9359ae6a5f9da32b17faa4ab60b8810adddf32e8166d383849499f3",
+    "baseline_digest": ""
+  }
+]

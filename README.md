@@ -6,13 +6,15 @@ Traceglass is a local Rust tool under development for comparing ordered executio
 
 ## Cold-Start Quick Reference
 
-- **Runtime Prerequisites**: Rust 1.70+ and Cargo with a working native linker. On Windows, use a GNU Rust toolchain with GCC or an MSVC toolchain with Visual C++ build tools. The current tests ran on Rust 1.100; the minimum has not yet been verified.
+- **Runtime Prerequisites**: Rust 1.83+ and Cargo with a working native linker. On Windows, use a GNU Rust toolchain with GCC or an MSVC toolchain with Visual C++ build tools. The current tests ran on Rust 1.100; the minimum has not yet been verified.
 - **Canonical Regression Shield Gate**:
   ```bash
   cargo test
   ```
 
-Each trace consists of UTF-8 lines containing an event name, a tab, and an event value. The core supports positional comparison and bounded alignment by event name, so insertions do not necessarily shift every later match. Repeated names can produce multiple valid alignments; deterministic tie rules choose one. A difference does not establish its cause. The interactive interface is still under development.
+Each trace consists of UTF-8 lines containing an event name, a tab, and an event value. Run `cargo run -- view before.trace after.trace` to inspect a pair. Use `p` and `n` to move one row, `P` and `N` to jump between differences, and `q` to quit; press Enter after each command. Closing standard input also exits.
+
+Alignment pairs events by name, so insertions do not necessarily shift every later match. Repeated names can produce multiple valid alignments; deterministic tie rules choose one. A difference does not establish its cause. Inputs are limited to 4 MiB each and alignment to one million matrix cells; long event fields are clipped to 120 characters in the view.
 
 ### What's Inside
 

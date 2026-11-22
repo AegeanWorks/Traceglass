@@ -2,6 +2,7 @@
 
 mod alignment;
 pub mod input;
+pub mod ui;
 pub use alignment::{align, AlignedRow, AlignmentError};
 
 #[derive(Debug, Clone, PartialEq, Eq)]

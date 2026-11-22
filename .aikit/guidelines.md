@@ -10,3 +10,4 @@ without modifying or quarantining that file; older versions migrate when a migra
 
 ## Rules
 - **G-001** (user): Software is Rust only; use a functional core, imperative shell, I/O at the edges, and explicit state machines.
+- **G-002** (user): Work autonomously without requesting human review; the agent reviews the running UI and records the evidence.

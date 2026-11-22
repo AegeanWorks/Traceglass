@@ -5,9 +5,9 @@
     "last_phase": "phase 4",
     "active_phase": 4,
     "status": "in_progress",
-    "updated_at": 1795346825.8485322,
+    "updated_at": 1795347370.8050618,
     "owner": "codex:traceglass",
-    "lease_until": 1795354025.8485322,
+    "lease_until": 1795354570.8050618,
     "started_by": "codex:traceglass",
     "continuations": [],
     "workspaces": [
@@ -238,6 +238,98 @@
       "status": "in_progress",
       "timestamp": 1795346825.8485322,
       "timestamp_str": "2026-11-22 14:27:05",
+      "agent": "codex:traceglass",
+      "checklists": "passed",
+      "workspaces": [
+        {
+          "name": "traceglass",
+          "path": "projects/traceglass"
+        }
+      ]
+    },
+    {
+      "task_id": "build",
+      "phase": "phase 3",
+      "phase_num": 3,
+      "description": "Implemented terminal view and character-level difference; UI review reports 246 added lines over 200-line budget",
+      "files_affected": [
+        ".aikit/guidelines.md",
+        "Cargo.toml",
+        "README.md",
+        "reports/aikit-observations.md",
+        "reports/architecture-audit.md",
+        "src/lib.rs",
+        "src/main.rs",
+        ".aikit/ui_history.json",
+        ".aikit/ui_task.json",
+        "examples/after.trace",
+        "examples/before.trace",
+        "src/ui.rs",
+        "tests/cli.rs",
+        "tests/ui.rs"
+      ],
+      "status": "in_progress",
+      "timestamp": 1795347215.2460155,
+      "timestamp_str": "2026-11-22 14:33:35",
+      "agent": "codex:traceglass",
+      "handoff": {
+        "next": "resolve UI diff budget without weakening checks, review terminal view, close UI task and run project gates",
+        "open": "UI task active with full commit hash baseline",
+        "evidence": "literal HEAD was falsely reported as moved"
+      },
+      "workspaces": [
+        {
+          "name": "traceglass",
+          "path": "projects/traceglass"
+        }
+      ]
+    },
+    {
+      "task_id": "build",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/3] Core committed; [2/3] deliver reviewed terminal view; [3/3] restore character detail, audit and verify delivery",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1795347314.88454,
+      "timestamp_str": "2026-11-22 14:35:14",
+      "agent": "codex:traceglass",
+      "impact_assessment": {
+        "why": "Keep the already reviewed terminal view and its later detail feature independently verifiable",
+        "benefits": "Bounded UI reviews while retaining the full requested experience",
+        "risks": "contract: partial interface; dependency: linker configuration; concurrency: no shared writes; state: lost enhancement",
+        "mitigation": "Preserve enhancement and tests with verified backup, restore immediately after base milestone, run all gates"
+      },
+      "plan_digest": "fb9a56c287c7e2044eca70d474aa2e98831e11017b92690d9a39cb1f594fab73",
+      "workspaces": [
+        {
+          "name": "traceglass",
+          "path": "projects/traceglass"
+        }
+      ]
+    },
+    {
+      "task_id": "build",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "Base terminal view reviewed and all project gates passed; character detail is preserved for the next milestone",
+      "files_affected": [
+        ".aikit/guidelines.md",
+        ".aikit/task_ledger.json",
+        "Cargo.toml",
+        "README.md",
+        "reports/aikit-observations.md",
+        "reports/architecture-audit.md",
+        "src/lib.rs",
+        "src/main.rs",
+        ".aikit/ui_history.json",
+        "src/ui.rs",
+        "tests/cli.rs",
+        "tests/ui.rs"
+      ],
+      "status": "in_progress",
+      "timestamp": 1795347370.8050618,
+      "timestamp_str": "2026-11-22 14:36:10",
       "agent": "codex:traceglass",
       "checklists": "passed",
       "workspaces": [
