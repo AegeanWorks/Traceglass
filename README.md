@@ -8,6 +8,8 @@
 
 Traceglass is a local Rust terminal workbench for comparing ordered execution traces.
 
+> **Archived**: Work completed: v2 JSON diff reporting and view fixes delivered and published; project retired (archived 2026-11-22). This project is read-only; its GitHub repository is archived.
+
 ## Cold-Start Quick Reference
 
 - **Runtime Prerequisites**: Rust 1.83+ and Cargo with a working native linker. On Windows, use a GNU Rust toolchain with GCC or an MSVC toolchain with Visual C++ build tools. The current tests ran on Rust 1.100; the minimum has not yet been verified.
