@@ -1,6 +1,28 @@
 //! Pure terminal presentation and command interpretation.
 use crate::{Comparison, Event, Navigation, NavigationAction};
 
+/// Produce a stable, non-interactive summary without performing I/O.
+pub fn summarize(comparison: &Comparison) -> (bool, String) {
+    let mut count = 0usize;
+    let mut first = None;
+    for index in 0..comparison.len() {
+        if comparison.differs(index) {
+            count += 1;
+            first.get_or_insert(index + 1);
+        }
+    }
+    match first {
+        None => (false, format!("equal: {} rows\n", comparison.len())),
+        Some(row) => (
+            true,
+            format!(
+                "different: {count} of {} rows; first difference: row {row}\n",
+                comparison.len()
+            ),
+        ),
+    }
+}
+
 pub fn parse_action(command: &str) -> Option<NavigationAction> {
     match command.trim() {
         "p" | "previous" => Some(NavigationAction::Previous),

@@ -1,14 +1,14 @@
 use std::io::{self, BufRead, Read, Write};
 use std::process::ExitCode;
 use traceglass::input::read_trace;
-use traceglass::ui::{parse_action, render};
+use traceglass::ui::{parse_action, render, summarize};
 use traceglass::{parse_trace, Comparison, Navigation};
 
 fn main() -> ExitCode {
     let args: Vec<String> = std::env::args().skip(1).collect();
     match args.as_slice() {
         [command] if command == "inventory" => {
-            println!("cli|inventory|inventory\ncli|demo|demo --scripted\ncli|view|view LEFT RIGHT");
+            println!("cli|inventory|inventory\ncli|demo|demo --scripted\ncli|view|view LEFT RIGHT\ncli|check|check LEFT RIGHT");
             ExitCode::SUCCESS
         }
         [command, scripted] if command == "demo" && scripted == "--scripted" => demo(0),
@@ -27,6 +27,14 @@ fn main() -> ExitCode {
                 ExitCode::FAILURE
             }
         },
+        [command, left, right] if command == "check" => match check(left, right) {
+            Ok(false) => ExitCode::SUCCESS,
+            Ok(true) => ExitCode::from(1),
+            Err(error) => {
+                eprintln!("Error: {error}");
+                ExitCode::from(2)
+            }
+        },
         _ => usage(),
     }
 }
@@ -43,11 +51,11 @@ fn demo(seed: u64) -> ExitCode {
 }
 
 fn usage() -> ExitCode {
-    eprintln!("Usage: traceglass view LEFT RIGHT | inventory | demo --scripted [--seed N]");
+    eprintln!("Usage: traceglass view|check LEFT RIGHT | inventory | demo --scripted [--seed N]");
     ExitCode::from(2)
 }
 
-fn view(left: &str, right: &str) -> Result<(), String> {
+fn load_comparison(left: &str, right: &str) -> Result<Comparison, String> {
     const MAX_BYTES: usize = 4 * 1024 * 1024;
     const MAX_CELLS: usize = 1_000_000;
     let load = |path: &str| {
@@ -55,8 +63,21 @@ fn view(left: &str, right: &str) -> Result<(), String> {
             std::fs::File::open(path).map_err(|error| format!("cannot open {path:?}: {error}"))?;
         read_trace(file, MAX_BYTES).map_err(|error| format!("{path:?}: {error}"))
     };
-    let comparison = Comparison::try_aligned(load(left)?, load(right)?, MAX_CELLS)
-        .map_err(|_| "traces exceed the alignment limit of 1,000,000 cells".to_string())?;
+    Comparison::try_aligned(load(left)?, load(right)?, MAX_CELLS)
+        .map_err(|_| "traces exceed the alignment limit of 1,000,000 cells".to_string())
+}
+
+fn check(left: &str, right: &str) -> Result<bool, String> {
+    let (different, summary) = summarize(&load_comparison(left, right)?);
+    io::stdout()
+        .lock()
+        .write_all(summary.as_bytes())
+        .map_err(|error| format!("console output failed: {error}"))?;
+    Ok(different)
+}
+
+fn view(left: &str, right: &str) -> Result<(), String> {
+    let comparison = load_comparison(left, right)?;
     let mut state = Navigation::new(&comparison);
     let stdin = io::stdin();
     let mut input = stdin.lock();

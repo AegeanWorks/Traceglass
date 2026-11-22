@@ -25,3 +25,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: A positional mismatch makes later matching events look changed after an insertion and duplicates existing golden-trace checks.
 - **Decision**: Provide deterministic minimum-cost alignment pairing equal names, with explicit changes, insertions and removals and a hard matrix-cell limit.
 - **Consequences**: Repeated names may have several equally optimal alignments; deterministic tie rules select one and no causal inference is implied. Large comparisons are rejected rather than allocated without bound.
+
+### ADR-003: Non-interactive comparison contract
+- **Date**: 2026-11-22
+- **Status**: Accepted
+- **Context**: Programmers need to use the same trace alignment in automated regression checks.
+- **Decision**: Add check LEFT RIGHT with stable plain-text summary; exit zero for equal, one for differences, and two for usage or input errors.
+- **Consequences**: The command reads each bounded snapshot once and uses the same alignment limit and tie rules as the interactive view; it does not launch a shell or mutate input files.

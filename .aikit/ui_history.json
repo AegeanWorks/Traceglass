@@ -174,5 +174,55 @@
     "final_snapshot_entries": 0,
     "surface_digest": "e267cc3082a5d2756dc3dee1d200c82740c84cc82b77ba907cd8ad61b38bbe61",
     "baseline_digest": "b39b8102b9359ae6a5f9da32b17faa4ab60b8810adddf32e8166d383849499f3"
+  },
+  {
+    "schema": 1,
+    "surface": "terminal",
+    "mode": "visual",
+    "visual_change": true,
+    "changed_paths": [
+      ".aikit/decisions.md",
+      "README.md",
+      "reports/architecture-audit.md",
+      "src/main.rs",
+      "src/ui.rs",
+      "tests/cli.rs"
+    ],
+    "no_visual_reason": "",
+    "baseline_commit": "98657365aae75528debe20849b0b9527fd61644c",
+    "contract_hash": "2d6d0e0dc5a2742c02d264765de1c4cf5593335bf3c926bc6a83057d5eb95c4b",
+    "started_at": 1795350774.0277843,
+    "finished_at": 1795350896.475989,
+    "strikes": 1,
+    "reviewer": "codex:traceglass",
+    "review": {
+      "reviewer": "codex:traceglass",
+      "surface": "terminal",
+      "surface_digest": "2750432bfb0e78f1c45037cdff0e0c79c57f242a87604bce98d42eb2ef4e70dd",
+      "snapshot_digest": "",
+      "snapshot_entries": 0,
+      "visual": true,
+      "reviewed_at": 1795350896.4759905,
+      "scoped_paths": [
+        ".aikit/decisions.md",
+        "README.md",
+        "reports/architecture-audit.md",
+        "src/main.rs",
+        "src/ui.rs",
+        "tests/cli.rs"
+      ],
+      "scoped_digest": "d27505ba03719e2331842f882f22e19ee8fa42c6b07d7abdc4bdf8a1f4786504"
+    },
+    "allowed_removals": [],
+    "allowed_tests": [
+      {
+        "path": "tests/cli.rs",
+        "reason": "Test CI exit codes and non-interactive file comparison"
+      }
+    ],
+    "final_snapshot_digest": "",
+    "final_snapshot_entries": 0,
+    "surface_digest": "2750432bfb0e78f1c45037cdff0e0c79c57f242a87604bce98d42eb2ef4e70dd",
+    "baseline_digest": "e267cc3082a5d2756dc3dee1d200c82740c84cc82b77ba907cd8ad61b38bbe61"
   }
 ]

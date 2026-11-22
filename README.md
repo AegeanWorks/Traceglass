@@ -16,6 +16,8 @@ Each trace consists of UTF-8 lines containing an event name, a tab, and an event
 
 Try `cargo run -- view examples/before.trace examples/after.trace`, then enter `N` to jump to the inserted retry event. For a changed row, the view identifies the first differing character even when it lies beyond the clipped preview.
 
+For scripts and CI, run `cargo run --quiet -- check before.trace after.trace`. It prints a one-line summary to stdout and reads no terminal input. Exit status is `0` for equal traces, `1` for differences, and `2` for invalid usage, input, alignment limits, or output errors; diagnostics go to stderr. `view` retains its existing exit codes: `0` on success, `1` on runtime errors and `2` on invalid usage.
+
 Alignment pairs events by name, so insertions do not necessarily shift every later match. Repeated names can produce multiple valid alignments; deterministic tie rules choose one. A difference does not establish its cause. Inputs are limited to 4 MiB each and alignment to one million matrix cells; long event fields are clipped to 120 characters in the view.
 
 ### What's Inside
