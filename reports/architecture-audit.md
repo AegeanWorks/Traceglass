@@ -65,3 +65,14 @@ on stderr. A two-difference pair produced both a `changed` and an `inserted` ite
 order. `view` with piped `N`/`q` still highlighted the inserted row and exited 0. All 36 tests
 passed on Rust 1.100 with the GNU toolchain; the declared 1.83 minimum and physical terminals
 remain untested.
+
+## Stable context window (2026-11-22, third session)
+
+`ui::render` now computes the window end first (`selected + 4`, capped by the row count) and
+places the start at `end - 8`. Previously the start was `selected - 3`, so the last row showed
+only four rows of context while a middle row showed eight. A pure renderer regression test
+builds a 12-row comparison, selects the last row and asserts eight rendered rows with the cursor
+on row 12 and row 5 still visible; it failed with four rows before the change. Rows near the
+beginning keep their previous bounds. The running binary was re-checked with a 12-event pair
+and piped navigation to the final row: eight rows render with row 5 still visible. All 37 tests
+pass on Rust 1.100 with the GNU toolchain.

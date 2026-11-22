@@ -167,8 +167,8 @@ fn value_difference(left: &str, right: &str) -> Option<String> {
 pub fn render(comparison: &Comparison, navigation: Navigation) -> String {
     let mut out = format!("TRACEGLASS | {} aligned rows\n", comparison.len());
     if let Some(selected) = navigation.selected() {
-        let start = selected.saturating_sub(3);
         let end = selected.saturating_add(4).min(comparison.len());
+        let start = end.saturating_sub(8);
         for index in start..end {
             let (left, right) = comparison.row(index).expect("bounded row");
             let (left_index, right_index) = comparison.source_indices(index).expect("bounded row");

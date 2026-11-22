@@ -81,3 +81,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: CI consumers of check --json only receive the first difference; repeated runs or prose parsing are needed to locate the rest, flags are order-sensitive, and there is no success exit for help
 - **Decision**: Add check --all-differences (requires --json) emitting schema version 2 with an items array of every differing row, its one-based source lines and kind; parse flags in any order; add help/--help/-h; accept a 256-byte view command
 - **Consequences**: Version 1 output and all exit codes stay byte-identical; --all-differences without --json is a usage error; kind is changed, inserted or removed; the view command limit now matches the documented 256 bytes
+
+### ADR-011: Keep a full context window at the end of the view
+- **Date**: 2026-11-22
+- **Status**: Accepted
+- **Context**: Anchoring the rendered window at selected-3 made the last rows show only four context rows, hiding earlier aligned rows exactly where a reviewer checks the final difference
+- **Decision**: Derive the window end first, capped by the comparison length, and place the start eight rows before it; the cursor still selects the same row
+- **Consequences**: Short and mid-list windows keep their previous bounds; near the end the view shows eight rows with the cursor at the bottom; navigation and source line rendering are unchanged

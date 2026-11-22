@@ -25,3 +25,9 @@
 - `aikit.py check` still prints a warning about the AIKit root reports inbox being over its 20-file cap (64 files) on every project check, although this project's own inbox is 2/20. This session placed verified findings in the root `reports/combined/traceglass.md` to avoid growing the inbox.
 - The project ledger still shows the completed `prefix-alignment` task as "active", owned by `codex:traceglass` with an unexpired lease. Opening a new task with `aikit.py checkpoint` succeeded without a take-over, but the status banner remains yellow and could mislead a cold-start agent into treating finished work as in flight.
 - Positive: the hygiene scan now handles the changed Rust files cleanly (`No hygiene findings`), and the UI review workflow (begin → allow-cross/allow-test → verify → agent review of the running binary) completed without touching AIKit rule files.
+
+## 2026-11-22 (third session, triage only — no AIKit changes)
+
+- A read-only source cross-check confirmed two of the reported gaps: the toolchain-blind gate/env path (F-01) and the manual CLI identity being discarded by `peek_ui_identifier`/`refresh_ui_identifier` (F-06). Both remain open.
+- Five earlier items were found to be deliberate design and were withdrawn in the root combined report: the root-vs-project resume scope, the workspace-scoped reports cap advisory, the UI change budget, `ui finish` re-checking, and the tracked project ledger blocking `deliver`. Reporting a design choice as a bug was a mistake on this side; the triage section now records the reasoning with source locations.
+- The user directed that AIKit itself must not be changed, so no AIKit source, rules, ledger or state files were edited. The read-only AIKit test run (`tests.kit_ui` plus `tests.kit_projects`) passed: 511 tests, OK, 1 skipped. Work continues in the traceglass project only.

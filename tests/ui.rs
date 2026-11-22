@@ -89,6 +89,18 @@ fn json_all_lists_every_difference_with_kind_and_source_lines() {
 }
 
 #[test]
+fn render_keeps_a_full_window_when_the_last_row_is_selected() {
+    let events: Vec<_> = (0..12)
+        .map(|i| traceglass::Event { name: format!("e{i}"), value: "v".into() })
+        .collect();
+    let comparison = Comparison::new(events.clone(), events);
+    let output = render(&comparison, Navigation::Browsing { selected: Some(11) });
+    assert_eq!(output.matches("[equal]").count(), 8);
+    assert!(output.contains(">    12 [equal]"));
+    assert!(output.contains("     5 [equal]"));
+}
+
+#[test]
 fn json_all_reports_an_empty_item_list_for_equal_and_empty_traces() {
     let step = parse_trace("step\t1\n").unwrap();
     let equal = Comparison::try_aligned(step.clone(), step, 4).unwrap();
