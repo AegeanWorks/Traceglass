@@ -16,7 +16,9 @@ Each trace consists of UTF-8 lines containing an event name, a tab, and an event
 
 Try `cargo run -- view examples/before.trace examples/after.trace`, then enter `N` to jump to the inserted retry event. For a changed row, the view identifies the first differing character even when it lies beyond the clipped preview.
 
-For scripts and CI, run `cargo run --quiet -- check before.trace after.trace`. It prints a one-line summary to stdout and reads no terminal input. Exit status is `0` for equal traces, `1` for differences, and `2` for invalid usage, input, alignment limits, or output errors; diagnostics go to stderr. `view` retains its existing exit codes: `0` on success, `1` on runtime errors and `2` on invalid usage.
+For scripts and CI, run `cargo run --quiet -- check before.trace after.trace`. It prints a one-line summary to stdout and does not prompt. Exit status is `0` for equal traces, `1` for differences, and `2` for invalid usage, input, alignment limits, or output errors; diagnostics go to stderr. `view` retains its existing exit codes: `0` on success, `1` on runtime errors and `2` on invalid usage.
+
+In `check`, use a single bare `-` in place of either file to read that trace from standard input, for example `producer | traceglass check expected.trace -`. The same 4 MiB and UTF-8 limits apply. Two `-` operands are rejected; use `./-` for a literal file named `-`. `view` treats `-` as a filename because its standard input controls navigation.
 
 Use `check --json before.trace after.trace` for a versioned JSON result. Version 1 has `version`, `equal`, `rows`, `differences`, and `first`. When traces match, `first` is `null`; otherwise it contains the one-based aligned `row` and original `left_line` and `right_line`. A missing side is `null`. JSON mode keeps the same exit statuses; errors produce diagnostics on stderr and no JSON on stdout.
 

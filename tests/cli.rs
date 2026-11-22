@@ -87,6 +87,36 @@ fn json_check_reports_versioned_results_and_preserves_exit_codes() {
     assert!(!error.stderr.is_empty());
 }
 
+#[test]
+fn check_accepts_a_pipe_on_either_side_and_rejects_two_pipes() {
+    let run = |args: &[&str], input: &[u8]| {
+        let mut child = Command::new(env!("CARGO_BIN_EXE_traceglass"))
+            .args(args)
+            .stdin(Stdio::piped())
+            .stdout(Stdio::piped())
+            .stderr(Stdio::piped())
+            .spawn()
+            .unwrap();
+        child.stdin.take().unwrap().write_all(input).unwrap();
+        child.wait_with_output().unwrap()
+    };
+    let before = fs::read("examples/before.trace").unwrap();
+    let equal = run(&["check", "examples/before.trace", "-"], &before);
+    assert_eq!(equal.status.code(), Some(0));
+    assert_eq!(equal.stdout, b"equal: 3 rows\n");
+    let different = run(&["check", "--json", "-", "examples/after.trace"], &before);
+    assert_eq!(different.status.code(), Some(1));
+    assert_eq!(different.stdout, b"{\"version\":1,\"equal\":false,\"rows\":4,\"differences\":1,\"first\":{\"row\":2,\"left_line\":null,\"right_line\":2}}\n");
+    let invalid = run(&["check", "-", "examples/after.trace"], &[0xff]);
+    assert_eq!(invalid.status.code(), Some(2));
+    assert!(invalid.stdout.is_empty());
+    assert!(String::from_utf8_lossy(&invalid.stderr).contains("UTF-8"));
+    let ambiguous = run(&["check", "-", "-"], b"");
+    assert_eq!(ambiguous.status.code(), Some(2));
+    assert!(ambiguous.stdout.is_empty());
+    assert!(String::from_utf8_lossy(&ambiguous.stderr).contains("standard input"));
+}
+
 #[cfg(any(unix, windows))]
 #[test]
 fn non_unicode_path_reports_an_error_instead_of_panicking() {

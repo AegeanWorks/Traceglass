@@ -378,5 +378,47 @@
     "final_snapshot_entries": 0,
     "surface_digest": "9981254be7e4b39488d16c71475fac73f28bf1f1f99fec6f6305c8c85a3bebbc",
     "baseline_digest": "e7ce907a46ec500a87d3ac9de0a21e2c92616ec00c59cd65e8a0b6160f443624"
+  },
+  {
+    "schema": 1,
+    "surface": "terminal",
+    "mode": "backend",
+    "visual_change": false,
+    "changed_paths": [
+      "src/main.rs",
+      "tests/cli.rs"
+    ],
+    "no_visual_reason": "",
+    "baseline_commit": "906f1d3a33ff41d72af7e50697c87dc2b1fd0017",
+    "contract_hash": "2d6d0e0dc5a2742c02d264765de1c4cf5593335bf3c926bc6a83057d5eb95c4b",
+    "started_at": 1795351844.5434222,
+    "finished_at": 1795351924.3916712,
+    "strikes": 0,
+    "reviewer": "",
+    "review": {
+      "reviewer": "",
+      "surface": "terminal",
+      "surface_digest": "9981254be7e4b39488d16c71475fac73f28bf1f1f99fec6f6305c8c85a3bebbc",
+      "snapshot_digest": "",
+      "snapshot_entries": 0,
+      "visual": false,
+      "reviewed_at": 1795351924.3916728,
+      "scoped_paths": [
+        "src/main.rs",
+        "tests/cli.rs"
+      ],
+      "scoped_digest": "d0f0093fc1eb2dca1b4b1b598233fd97f14f7f178f5a32634424c9aac07d73bc"
+    },
+    "allowed_removals": [],
+    "allowed_tests": [
+      {
+        "path": "tests/cli.rs",
+        "reason": "Exercise bounded pipe input and ambiguous operands"
+      }
+    ],
+    "final_snapshot_digest": "",
+    "final_snapshot_entries": 0,
+    "surface_digest": "9981254be7e4b39488d16c71475fac73f28bf1f1f99fec6f6305c8c85a3bebbc",
+    "baseline_digest": "9981254be7e4b39488d16c71475fac73f28bf1f1f99fec6f6305c8c85a3bebbc"
   }
 ]

@@ -53,3 +53,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: Automation needs structured comparison results with source locations rather than parsing prose.
 - **Decision**: Support check --json LEFT RIGHT with schema version 1, equality and row counts, and optional first difference with one-based source lines or null for absent sides.
 - **Consequences**: The existing text format and exit codes stay unchanged; errors remain on stderr with no JSON result. The schema contains no trace values.
+
+### ADR-007: Allow one standard-input trace in check mode
+- **Date**: 2026-11-22
+- **Status**: Accepted
+- **Context**: Programs should be able to pipe a trace directly into a non-interactive comparison.
+- **Decision**: Treat one bare dash operand as standard input only for check; reject two dashes before reading and use the existing bounded UTF-8 reader.
+- **Consequences**: A literal dash file in check is addressed as ./-; view still treats dash as a file because stdin is used for navigation. Exit codes and output formats are unchanged.

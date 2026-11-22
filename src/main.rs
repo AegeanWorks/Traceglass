@@ -70,10 +70,18 @@ fn usage() -> ExitCode {
     ExitCode::from(2)
 }
 
-fn load_comparison(left: &Path, right: &Path) -> Result<Comparison, String> {
+fn load_comparison(left: &Path, right: &Path, allow_stdin: bool) -> Result<Comparison, String> {
     const MAX_BYTES: usize = 4 * 1024 * 1024;
     const MAX_CELLS: usize = 1_000_000;
+    let is_stdin = |path: &Path| allow_stdin && path.as_os_str() == "-";
+    if is_stdin(left) && is_stdin(right) {
+        return Err("standard input can be used for only one trace".to_string());
+    }
     let load = |path: &Path| {
+        if is_stdin(path) {
+            return read_trace(io::stdin().lock(), MAX_BYTES)
+                .map_err(|error| format!("standard input: {error}"));
+        }
         let file =
             std::fs::File::open(path).map_err(|error| format!("cannot open {path:?}: {error}"))?;
         read_trace(file, MAX_BYTES).map_err(|error| format!("{path:?}: {error}"))
@@ -83,7 +91,7 @@ fn load_comparison(left: &Path, right: &Path) -> Result<Comparison, String> {
 }
 
 fn check(left: &Path, right: &Path, json: bool) -> Result<bool, String> {
-    let comparison = load_comparison(left, right)?;
+    let comparison = load_comparison(left, right, true)?;
     let (different, summary) = if json {
         summarize_json(&comparison)
     } else {
@@ -97,7 +105,7 @@ fn check(left: &Path, right: &Path, json: bool) -> Result<bool, String> {
 }
 
 fn view(left: &Path, right: &Path) -> Result<(), String> {
-    let comparison = load_comparison(left, right)?;
+    let comparison = load_comparison(left, right, false)?;
     let mut state = Navigation::new(&comparison);
     let stdin = io::stdin();
     let mut input = stdin.lock();

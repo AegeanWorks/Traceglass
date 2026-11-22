@@ -16,6 +16,8 @@
 
 `check --json` uses the same pure difference counts and comparison source indices as the text summary and terminal view. Its versioned schema uses one-based locations and explicit `null` for an absent side; it contains no event text. The shell alone performs output and maps errors to exit status 2.
 
+`check` may read one trace from standard input using a bare `-`; the shell rejects two stdin operands before reading and uses the same bounded input adapter for files and pipes. `view` still reserves standard input for navigation and treats `-` as a filename. Subprocess tests cover both pipe positions, JSON mode, invalid UTF-8 and the ambiguous two-pipe case.
+
 ## Native paths
 
 The shell now reads arguments as operating-system strings and passes file arguments as native paths into the file adapter; event parsing and alignment remain unchanged. A Windows test reproduces the former panic with an unpaired surrogate and verifies an ordinary input error instead. A Unix-only test exercises a real non-UTF-8 filename, but was not run on the Windows host.
