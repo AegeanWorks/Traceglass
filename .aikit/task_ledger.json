@@ -1,13 +1,13 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "build",
+    "task_id": "audit-final",
     "last_phase": "phase 4",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1795347530.162463,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1795347652.8906558,
     "owner": "codex:traceglass",
-    "lease_until": 1795354730.162463,
+    "lease_until": 1795354852.8906558,
     "started_by": "codex:traceglass",
     "continuations": [],
     "workspaces": [
@@ -15,10 +15,7 @@
         "name": "traceglass",
         "path": "projects/traceglass"
       }
-    ],
-    "completed_at": 1795347554.3845994,
-    "completed_head": "0138885e6e5be6be110989ace0b9cbe69b50aa4f",
-    "completed_tree": "d51a188b0f5f17a4acec982986b24e88d6885957"
+    ]
   },
   "checkpoints": [
     {
@@ -385,6 +382,53 @@
         ],
         "forced": false
       }
+    },
+    {
+      "task_id": "audit-final",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/1] Finalize architecture audit and portfolio notes",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1795347636.955004,
+      "timestamp_str": "2026-11-22 14:40:36",
+      "agent": "codex:traceglass",
+      "impact_assessment": {
+        "why": "Replace stale work-in-progress descriptions with verified evidence",
+        "benefits": "Accurate cold-start documentation",
+        "risks": "contract: misleading claims; dependency: none; concurrency: none; state: stale evidence",
+        "mitigation": "Report observed tests and limitations and run project gates"
+      },
+      "plan_digest": "49e9c20971ce6eb339a32698ec95b22c6d4e82fbff18297fea92d3702d61fb47",
+      "workspaces": [
+        {
+          "name": "traceglass",
+          "path": "projects/traceglass"
+        }
+      ]
+    },
+    {
+      "task_id": "audit-final",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "Audit and profile notes finalized; all project gates passed",
+      "files_affected": [
+        ".aikit/task_ledger.json",
+        "README.md",
+        "reports/aikit-observations.md",
+        "reports/architecture-audit.md"
+      ],
+      "status": "in_progress",
+      "timestamp": 1795347652.8906558,
+      "timestamp_str": "2026-11-22 14:40:52",
+      "agent": "codex:traceglass",
+      "checklists": "passed",
+      "workspaces": [
+        {
+          "name": "traceglass",
+          "path": "projects/traceglass"
+        }
+      ]
     }
   ]
 }

@@ -1,4 +1,4 @@
-# Architecture audit — work in progress
+# Architecture audit
 
 ## 2026-11-22
 
@@ -12,4 +12,6 @@
 
 ## Portfolio comparison
 
-The public repository inventory was retrieved through GitHub's API on 2026-11-22 (one page of 100 was sufficient; page two was empty). Sextant already verifies state machines and checks golden traces for the first differing line. Traceglass targets generic program event traces and interactive inspection of bounded insertion/deletion-aware alignment. This distinguishes its intended workflow from Sextant; it is not a claim of global novelty or a completed user experience.
+The public repository inventory was retrieved through GitHub's API on 2026-11-22 (one page of 100 was sufficient; page two was empty). Sextant already verifies state machines and checks golden traces for the first differing line. Traceglass compares generic program event traces and offers interactive inspection of bounded insertion/deletion-aware alignment. This distinguishes its workflow from Sextant; it is not a claim of global novelty.
+
+The profile's paginated starred-repository names were also inspected. Descriptions of additional projects not present in the public owner inventory did not identify another trace comparison workbench.

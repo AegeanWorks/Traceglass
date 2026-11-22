@@ -2,7 +2,7 @@
 
 [![Built with AIKit](https://img.shields.io/badge/built%20with-AIKit-6f42c1)](https://github.com/AegeanWorks/AIKit)
 
-Traceglass is a local Rust tool under development for comparing ordered execution traces.
+Traceglass is a local Rust terminal workbench for comparing ordered execution traces.
 
 ## Cold-Start Quick Reference
 
