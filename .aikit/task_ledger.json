@@ -3,8 +3,8 @@
   "active_task": {
     "task_id": "source-lines",
     "last_phase": "phase 4",
-    "active_phase": 4,
-    "status": "in_progress",
+    "active_phase": 5,
+    "status": "completed",
     "updated_at": 1795351423.6745257,
     "owner": "codex:traceglass",
     "lease_until": 1795358623.6745257,
@@ -15,48 +15,12 @@
         "name": "traceglass",
         "path": "projects/traceglass"
       }
-    ]
+    ],
+    "completed_at": 1795351460.9670255,
+    "completed_head": "7d0386dbd421cd672417dbddae59df8a6cc834b0",
+    "completed_tree": "1b8af727383774b5a5c63129f033c4437008cdf2"
   },
   "checkpoints": [
-    {
-      "task_id": "build",
-      "phase": "phase 3",
-      "phase_num": 3,
-      "description": "Rust core tests pass on installed GNU toolchain; AIKit gates report Rust hygiene and Python compatibility gaps",
-      "files_affected": [
-        ".aikit/decisions.md",
-        ".aikit/guidelines.md",
-        ".aikit/project.json",
-        ".aikit/task_ledger.json",
-        ".gitignore",
-        "README.md",
-        "demo.py",
-        "inventory.py",
-        ".aikit/media.json",
-        ".aikit/ui.json",
-        "Cargo.lock",
-        "Cargo.toml",
-        "assets/logo.svg",
-        "assets/social-preview.svg",
-        "reports/aikit-observations.md",
-        "src/lib.rs",
-        "tests/comparison.rs"
-      ],
-      "status": "in_progress",
-      "timestamp": 1795346319.494726,
-      "timestamp_str": "2026-11-22 14:18:39",
-      "agent": "codex:traceglass",
-      "handoff": {
-        "next": "adapt AIKit compatibility to Rust and resolve Rust-only hygiene gate, complete UI and audit",
-        "failed": "hygiene inconclusive, compatibility invokes Python scaffold, README headings"
-      },
-      "workspaces": [
-        {
-          "name": "traceglass",
-          "path": "projects/traceglass"
-        }
-      ]
-    },
     {
       "task_id": "build",
       "phase": "phase 3",
@@ -574,6 +538,23 @@
           "path": "projects/traceglass"
         }
       ]
+    },
+    {
+      "task_id": "source-lines",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'source-lines' completed successfully.",
+      "status": "completed",
+      "timestamp": 1795351461.0630949,
+      "timestamp_str": "2026-11-22 15:44:21",
+      "agent": "codex:traceglass",
+      "head": "7d0386dbd421cd672417dbddae59df8a6cc834b0",
+      "delivery": {
+        "roots": [
+          "."
+        ],
+        "forced": false
+      }
     }
   ]
 }
