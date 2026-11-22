@@ -3,8 +3,8 @@
   "active_task": {
     "task_id": "publish",
     "last_phase": "phase 4",
-    "active_phase": 4,
-    "status": "in_progress",
+    "active_phase": 5,
+    "status": "completed",
     "updated_at": 1795355751.9793963,
     "owner": "opencode:hy4-flash-free",
     "lease_until": 1795362951.9793963,
@@ -15,33 +15,12 @@
         "name": "traceglass",
         "path": "projects/traceglass"
       }
-    ]
+    ],
+    "completed_at": 1795355767.5496187,
+    "completed_head": "e759b5897049ef9241e9dbf41e2b2539c6f61868",
+    "completed_tree": "329609e81e00f1f1a3446acf12d0cec298522267"
   },
   "checkpoints": [
-    {
-      "task_id": "json-check",
-      "phase": "phase 2",
-      "phase_num": 2,
-      "description": "[1/1] Add versioned JSON output to non-interactive checks with source locations",
-      "files_affected": [],
-      "status": "in_progress",
-      "timestamp": 1795351519.4305866,
-      "timestamp_str": "2026-11-22 15:45:19",
-      "agent": "codex:traceglass",
-      "impact_assessment": {
-        "why": "CI integrations need stable structured results and original locations without parsing prose",
-        "benefits": "Reliable machine-readable summary while retaining existing output and exit codes",
-        "risks": "contract: schema stability and null positions; dependency: none; concurrency: existing snapshot semantics; state: mismatch between formats",
-        "mitigation": "Version the schema, derive both formats from the same comparison, test equal, insertions and error paths"
-      },
-      "plan_digest": "0f4be6e7406093784f6df5e92114334b26f93b8de6d9cd9fcbcec87cad791cad",
-      "workspaces": [
-        {
-          "name": "traceglass",
-          "path": "projects/traceglass"
-        }
-      ]
-    },
     {
       "task_id": "json-check",
       "phase": "phase 4",
@@ -471,6 +450,23 @@
           "path": "projects/traceglass"
         }
       ]
+    },
+    {
+      "task_id": "publish",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'publish' completed successfully.",
+      "status": "completed",
+      "timestamp": 1795355767.8281612,
+      "timestamp_str": "2026-11-22 16:56:07",
+      "agent": "opencode:hy4-flash-free",
+      "head": "e759b5897049ef9241e9dbf41e2b2539c6f61868",
+      "delivery": {
+        "roots": [
+          "."
+        ],
+        "forced": false
+      }
     }
   ]
 }
