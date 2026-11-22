@@ -522,5 +522,35 @@
     "final_snapshot_entries": 0,
     "surface_digest": "9981254be7e4b39488d16c71475fac73f28bf1f1f99fec6f6305c8c85a3bebbc",
     "baseline_digest": "9981254be7e4b39488d16c71475fac73f28bf1f1f99fec6f6305c8c85a3bebbc"
+  },
+  {
+    "schema": 1,
+    "surface": "terminal",
+    "mode": "visual",
+    "visual_change": true,
+    "changed_paths": [],
+    "no_visual_reason": "",
+    "no_change_reason": "Reviewed the running CLI at commit 2c64a48: help exits 0, v2 JSON lists every difference with kind and source lines, flags work in any order, v1 output unchanged, view navigation works; evidence in reports/architecture-audit.md",
+    "baseline_commit": "2c64a487776e52cafb5f9522a48263a7ae082b6b",
+    "contract_hash": "2d6d0e0dc5a2742c02d264765de1c4cf5593335bf3c926bc6a83057d5eb95c4b",
+    "started_at": 1795354638.1985793,
+    "finished_at": 1795354644.6245663,
+    "strikes": 0,
+    "reviewer": "opencode:hy4-flash-free",
+    "review": {
+      "reviewer": "opencode:hy4-flash-free",
+      "surface": "terminal",
+      "surface_digest": "02fe2d5a9f94c81c67a6d45305b2c67898f497b94f04299f4ad1f9b498250923",
+      "snapshot_digest": "",
+      "snapshot_entries": 0,
+      "visual": true,
+      "reviewed_at": 1795354644.6245677
+    },
+    "allowed_removals": [],
+    "allowed_tests": [],
+    "final_snapshot_digest": "",
+    "final_snapshot_entries": 0,
+    "surface_digest": "02fe2d5a9f94c81c67a6d45305b2c67898f497b94f04299f4ad1f9b498250923",
+    "baseline_digest": "02fe2d5a9f94c81c67a6d45305b2c67898f497b94f04299f4ad1f9b498250923"
   }
 ]
