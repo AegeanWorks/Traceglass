@@ -122,5 +122,57 @@
     "final_snapshot_entries": 0,
     "surface_digest": "b39b8102b9359ae6a5f9da32b17faa4ab60b8810adddf32e8166d383849499f3",
     "baseline_digest": ""
+  },
+  {
+    "schema": 1,
+    "surface": "terminal",
+    "mode": "visual",
+    "visual_change": true,
+    "changed_paths": [
+      "README.md",
+      "examples/after.trace",
+      "examples/before.trace",
+      "reports/aikit-observations.md",
+      "reports/architecture-audit.md",
+      "src/ui.rs",
+      "tests/ui.rs"
+    ],
+    "no_visual_reason": "",
+    "baseline_commit": "e86deaceda2c22131dedf75700d48cff3213e884",
+    "contract_hash": "2d6d0e0dc5a2742c02d264765de1c4cf5593335bf3c926bc6a83057d5eb95c4b",
+    "started_at": 1795347403.1876311,
+    "finished_at": 1795347488.2121065,
+    "strikes": 0,
+    "reviewer": "codex:traceglass",
+    "review": {
+      "reviewer": "codex:traceglass",
+      "surface": "terminal",
+      "surface_digest": "e267cc3082a5d2756dc3dee1d200c82740c84cc82b77ba907cd8ad61b38bbe61",
+      "snapshot_digest": "",
+      "snapshot_entries": 0,
+      "visual": true,
+      "reviewed_at": 1795347488.2121081,
+      "scoped_paths": [
+        "README.md",
+        "examples/after.trace",
+        "examples/before.trace",
+        "reports/aikit-observations.md",
+        "reports/architecture-audit.md",
+        "src/ui.rs",
+        "tests/ui.rs"
+      ],
+      "scoped_digest": "69ae1a15f18f30c8b6bbcf1d227aeca171dacea1e83396e97275858f17a85653"
+    },
+    "allowed_removals": [],
+    "allowed_tests": [
+      {
+        "path": "tests/ui.rs",
+        "reason": "Restore regression coverage for differences beyond the clipped preview"
+      }
+    ],
+    "final_snapshot_digest": "",
+    "final_snapshot_entries": 0,
+    "surface_digest": "e267cc3082a5d2756dc3dee1d200c82740c84cc82b77ba907cd8ad61b38bbe61",
+    "baseline_digest": "b39b8102b9359ae6a5f9da32b17faa4ab60b8810adddf32e8166d383849499f3"
   }
 ]

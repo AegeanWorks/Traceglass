@@ -37,6 +37,30 @@ fn event(event: Option<&Event>) -> String {
     }
 }
 
+fn value_difference(left: &str, right: &str) -> Option<String> {
+    let mut a = left.chars();
+    let mut b = right.chars();
+    let mut position = 1usize;
+    loop {
+        let (x, y) = (a.next(), b.next());
+        if x != y {
+            let describe = |c: Option<char>| {
+                c.map(|c| safe(&c.to_string()))
+                    .unwrap_or_else(|| "(end)".into())
+            };
+            return Some(format!(
+                "        first value difference at character {position}: L {} | R {}\n",
+                describe(x),
+                describe(y)
+            ));
+        }
+        if x.is_none() {
+            return None;
+        }
+        position += 1;
+    }
+}
+
 pub fn render(comparison: &Comparison, navigation: Navigation) -> String {
     let mut out = format!("TRACEGLASS | {} aligned rows\n", comparison.len());
     if let Some(selected) = navigation.selected() {
@@ -60,6 +84,13 @@ pub fn render(comparison: &Comparison, navigation: Navigation) -> String {
                 event(left),
                 event(right)
             ));
+            if index == selected {
+                if let (Some(left), Some(right)) = (left, right) {
+                    if let Some(detail) = value_difference(&left.value, &right.value) {
+                        out.push_str(&detail);
+                    }
+                }
+            }
         }
     } else if comparison.is_empty() {
         out.push_str("Both traces are empty.\n");

@@ -33,3 +33,13 @@ fn long_values_are_visibly_clipped() {
     assert!(!output.contains(&"x".repeat(500)));
 }
 
+#[test]
+fn changed_values_explain_a_difference_beyond_the_clipped_prefix() {
+    let prefix = "x".repeat(130);
+    let left = parse_trace(&format!("event\t{prefix}A\n")).unwrap();
+    let right = parse_trace(&format!("event\t{prefix}B\n")).unwrap();
+    let comparison = Comparison::try_aligned(left, right, 10).unwrap();
+    let output = render(&comparison, Navigation::new(&comparison));
+    assert!(output.contains("first value difference at character 131"));
+    assert!(output.contains("L A | R B"));
+}
