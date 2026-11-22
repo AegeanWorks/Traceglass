@@ -1,26 +1,64 @@
 //! Pure terminal presentation and command interpretation.
 use crate::{Comparison, Event, Navigation, NavigationAction};
 
-/// Produce a stable, non-interactive summary without performing I/O.
-pub fn summarize(comparison: &Comparison) -> (bool, String) {
+fn difference_counts(comparison: &Comparison) -> (usize, Option<usize>) {
     let mut count = 0usize;
     let mut first = None;
     for index in 0..comparison.len() {
         if comparison.differs(index) {
             count += 1;
-            first.get_or_insert(index + 1);
+            first.get_or_insert(index);
         }
     }
+    (count, first)
+}
+
+/// Produce a stable, non-interactive summary without performing I/O.
+pub fn summarize(comparison: &Comparison) -> (bool, String) {
+    let (count, first) = difference_counts(comparison);
     match first {
         None => (false, format!("equal: {} rows\n", comparison.len())),
         Some(row) => (
             true,
             format!(
-                "different: {count} of {} rows; first difference: row {row}\n",
-                comparison.len()
+                "different: {count} of {} rows; first difference: row {}\n",
+                comparison.len(),
+                row + 1
             ),
         ),
     }
+}
+
+/// Version 1 JSON uses one-based row and file line numbers, or null for a missing side.
+pub fn summarize_json(comparison: &Comparison) -> (bool, String) {
+    let (count, first) = difference_counts(comparison);
+    let detail = match first {
+        None => "null".to_string(),
+        Some(index) => {
+            let (left, right) = comparison.source_indices(index).expect("bounded row");
+            let line = |value: Option<usize>| {
+                value
+                    .map(|i| (i + 1).to_string())
+                    .unwrap_or_else(|| "null".into())
+            };
+            format!(
+                "{{\"row\":{},\"left_line\":{},\"right_line\":{}}}",
+                index + 1,
+                line(left),
+                line(right)
+            )
+        }
+    };
+    (
+        count != 0,
+        format!(
+            "{{\"version\":1,\"equal\":{},\"rows\":{},\"differences\":{},\"first\":{}}}\n",
+            count == 0,
+            comparison.len(),
+            count,
+            detail
+        ),
+    )
 }
 
 pub fn parse_action(command: &str) -> Option<NavigationAction> {

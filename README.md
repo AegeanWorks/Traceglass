@@ -18,6 +18,8 @@ Try `cargo run -- view examples/before.trace examples/after.trace`, then enter `
 
 For scripts and CI, run `cargo run --quiet -- check before.trace after.trace`. It prints a one-line summary to stdout and reads no terminal input. Exit status is `0` for equal traces, `1` for differences, and `2` for invalid usage, input, alignment limits, or output errors; diagnostics go to stderr. `view` retains its existing exit codes: `0` on success, `1` on runtime errors and `2` on invalid usage.
 
+Use `check --json before.trace after.trace` for a versioned JSON result. Version 1 has `version`, `equal`, `rows`, `differences`, and `first`. When traces match, `first` is `null`; otherwise it contains the one-based aligned `row` and original `left_line` and `right_line`. A missing side is `null`. JSON mode keeps the same exit statuses; errors produce diagnostics on stderr and no JSON on stdout.
+
 Alignment pairs events by name, so insertions do not necessarily shift every later match. Repeated names can produce multiple valid alignments; deterministic tie rules choose one. A difference does not establish its cause. Inputs are limited to 4 MiB each and alignment to one million matrix cells; long event fields are clipped to 120 characters in the view.
 
 File arguments use native operating-system paths, including non-Unicode filenames where the filesystem supports them. Trace file contents must still be UTF-8.

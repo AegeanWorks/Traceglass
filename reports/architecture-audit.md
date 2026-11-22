@@ -14,6 +14,8 @@
 
 `check` and `view` share the same bounded input loader and alignment. The pure `summarize` function counts aligned differences; the shell writes its result and maps equal, different and error outcomes to exit statuses 0, 1 and 2. An end-to-end test covers both comparisons and input errors with stdin closed. The comparison still uses the documented heuristic for repeated event names.
 
+`check --json` uses the same pure difference counts and comparison source indices as the text summary and terminal view. Its versioned schema uses one-based locations and explicit `null` for an absent side; it contains no event text. The shell alone performs output and maps errors to exit status 2.
+
 ## Native paths
 
 The shell now reads arguments as operating-system strings and passes file arguments as native paths into the file adapter; event parsing and alignment remain unchanged. A Windows test reproduces the former panic with an unpaired surrogate and verifies an ordinary input error instead. A Unix-only test exercises a real non-UTF-8 filename, but was not run on the Windows host.

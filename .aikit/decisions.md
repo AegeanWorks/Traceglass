@@ -46,3 +46,10 @@ contract, a dependency, a data format or the architecture; IDs are consecutive a
 - **Context**: An aligned row number may not match either input file after an insertion or removal.
 - **Decision**: Expose zero-based source event indices for each comparison row and render existing events with one-based input line numbers.
 - **Consequences**: The trace format must continue to map one parsed event to one input line; absent sides have no source index. CI summary wording remains unchanged.
+
+### ADR-006: Versioned JSON check summaries
+- **Date**: 2026-11-22
+- **Status**: Accepted
+- **Context**: Automation needs structured comparison results with source locations rather than parsing prose.
+- **Decision**: Support check --json LEFT RIGHT with schema version 1, equality and row counts, and optional first difference with one-based source lines or null for absent sides.
+- **Consequences**: The existing text format and exit codes stay unchanged; errors remain on stderr with no JSON result. The schema contains no trace values.

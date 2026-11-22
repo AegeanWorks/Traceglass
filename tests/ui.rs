@@ -1,4 +1,4 @@
-use traceglass::ui::{parse_action, render};
+use traceglass::ui::{parse_action, render, summarize_json};
 use traceglass::{parse_trace, Comparison, Navigation, NavigationAction};
 
 #[test]
@@ -54,4 +54,26 @@ fn view_shows_original_line_numbers_after_an_insertion() {
     assert!(output.contains("R line 3: close: 3"));
     assert!(output.contains("L (missing)"));
     assert!(output.contains("R line 2: log: extra"));
+}
+
+#[test]
+fn json_summary_marks_missing_right_line_on_removal() {
+    let left = parse_trace("removed\t1\n").unwrap();
+    let comparison = Comparison::try_aligned(left, vec![], 10).unwrap();
+    let (different, output) = summarize_json(&comparison);
+    assert!(different);
+    assert_eq!(output, "{\"version\":1,\"equal\":false,\"rows\":1,\"differences\":1,\"first\":{\"row\":1,\"left_line\":1,\"right_line\":null}}\n");
+}
+
+#[test]
+fn json_summary_handles_empty_and_changed_traces() {
+    let empty = Comparison::try_aligned(vec![], vec![], 1).unwrap();
+    assert_eq!(
+        summarize_json(&empty).1,
+        "{\"version\":1,\"equal\":true,\"rows\":0,\"differences\":0,\"first\":null}\n"
+    );
+    let left = parse_trace("step\told\n").unwrap();
+    let right = parse_trace("step\tnew\n").unwrap();
+    let comparison = Comparison::try_aligned(left, right, 4).unwrap();
+    assert_eq!(summarize_json(&comparison).1, "{\"version\":1,\"equal\":false,\"rows\":1,\"differences\":1,\"first\":{\"row\":1,\"left_line\":1,\"right_line\":1}}\n");
 }

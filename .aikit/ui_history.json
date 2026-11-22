@@ -322,5 +322,61 @@
     "final_snapshot_entries": 0,
     "surface_digest": "e7ce907a46ec500a87d3ac9de0a21e2c92616ec00c59cd65e8a0b6160f443624",
     "baseline_digest": "2750432bfb0e78f1c45037cdff0e0c79c57f242a87604bce98d42eb2ef4e70dd"
+  },
+  {
+    "schema": 1,
+    "surface": "terminal",
+    "mode": "visual",
+    "visual_change": true,
+    "changed_paths": [
+      ".aikit/decisions.md",
+      "README.md",
+      "reports/architecture-audit.md",
+      "src/main.rs",
+      "src/ui.rs",
+      "tests/cli.rs",
+      "tests/ui.rs"
+    ],
+    "no_visual_reason": "",
+    "baseline_commit": "777055f183dd2ae51433a5509d16fbd78edcd9d1",
+    "contract_hash": "2d6d0e0dc5a2742c02d264765de1c4cf5593335bf3c926bc6a83057d5eb95c4b",
+    "started_at": 1795351557.988113,
+    "finished_at": 1795351723.556343,
+    "strikes": 0,
+    "reviewer": "codex:traceglass",
+    "review": {
+      "reviewer": "codex:traceglass",
+      "surface": "terminal",
+      "surface_digest": "9981254be7e4b39488d16c71475fac73f28bf1f1f99fec6f6305c8c85a3bebbc",
+      "snapshot_digest": "",
+      "snapshot_entries": 0,
+      "visual": true,
+      "reviewed_at": 1795351723.5563462,
+      "scoped_paths": [
+        ".aikit/decisions.md",
+        "README.md",
+        "reports/architecture-audit.md",
+        "src/main.rs",
+        "src/ui.rs",
+        "tests/cli.rs",
+        "tests/ui.rs"
+      ],
+      "scoped_digest": "68bb7442e59390ea5fa7a60ee079d378289b56300cff4a729f52c54498b6b280"
+    },
+    "allowed_removals": [],
+    "allowed_tests": [
+      {
+        "path": "tests/cli.rs",
+        "reason": "Exercise JSON output and exit statuses"
+      },
+      {
+        "path": "tests/ui.rs",
+        "reason": "Verify structured summary for absent source lines"
+      }
+    ],
+    "final_snapshot_digest": "",
+    "final_snapshot_entries": 0,
+    "surface_digest": "9981254be7e4b39488d16c71475fac73f28bf1f1f99fec6f6305c8c85a3bebbc",
+    "baseline_digest": "e7ce907a46ec500a87d3ac9de0a21e2c92616ec00c59cd65e8a0b6160f443624"
   }
 ]

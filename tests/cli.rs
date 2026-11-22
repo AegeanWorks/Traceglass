@@ -63,6 +63,30 @@ fn check_is_noninteractive_and_distinguishes_equal_different_and_error() {
         .contains("invalid trace"));
 }
 
+#[test]
+fn json_check_reports_versioned_results_and_preserves_exit_codes() {
+    let run = |left: &str, right: &str| {
+        Command::new(env!("CARGO_BIN_EXE_traceglass"))
+            .args(["check", "--json", left, right])
+            .stdin(Stdio::null())
+            .output()
+            .unwrap()
+    };
+    let equal = run("examples/before.trace", "examples/before.trace");
+    assert_eq!(equal.status.code(), Some(0));
+    assert_eq!(
+        equal.stdout,
+        b"{\"version\":1,\"equal\":true,\"rows\":3,\"differences\":0,\"first\":null}\n"
+    );
+    let different = run("examples/before.trace", "examples/after.trace");
+    assert_eq!(different.status.code(), Some(1));
+    assert_eq!(different.stdout, b"{\"version\":1,\"equal\":false,\"rows\":4,\"differences\":1,\"first\":{\"row\":2,\"left_line\":null,\"right_line\":2}}\n");
+    let error = run("examples/missing.trace", "examples/after.trace");
+    assert_eq!(error.status.code(), Some(2));
+    assert!(error.stdout.is_empty());
+    assert!(!error.stderr.is_empty());
+}
+
 #[cfg(any(unix, windows))]
 #[test]
 fn non_unicode_path_reports_an_error_instead_of_panicking() {

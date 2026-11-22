@@ -2,7 +2,7 @@ use std::io::{self, BufRead, Read, Write};
 use std::path::Path;
 use std::process::ExitCode;
 use traceglass::input::read_trace;
-use traceglass::ui::{parse_action, render, summarize};
+use traceglass::ui::{parse_action, render, summarize, summarize_json};
 use traceglass::{parse_trace, Comparison, Navigation};
 
 fn main() -> ExitCode {
@@ -31,7 +31,17 @@ fn main() -> ExitCode {
             }
         }
         [command, left, right] if command == "check" => {
-            match check(Path::new(left), Path::new(right)) {
+            match check(Path::new(left), Path::new(right), false) {
+                Ok(false) => ExitCode::SUCCESS,
+                Ok(true) => ExitCode::from(1),
+                Err(error) => {
+                    eprintln!("Error: {error}");
+                    ExitCode::from(2)
+                }
+            }
+        }
+        [command, flag, left, right] if command == "check" && flag == "--json" => {
+            match check(Path::new(left), Path::new(right), true) {
                 Ok(false) => ExitCode::SUCCESS,
                 Ok(true) => ExitCode::from(1),
                 Err(error) => {
@@ -56,7 +66,7 @@ fn demo(seed: u64) -> ExitCode {
 }
 
 fn usage() -> ExitCode {
-    eprintln!("Usage: traceglass view|check LEFT RIGHT | inventory | demo --scripted [--seed N]");
+    eprintln!("Usage: traceglass view LEFT RIGHT | check [--json] LEFT RIGHT | inventory | demo --scripted [--seed N]");
     ExitCode::from(2)
 }
 
@@ -72,8 +82,13 @@ fn load_comparison(left: &Path, right: &Path) -> Result<Comparison, String> {
         .map_err(|_| "traces exceed the alignment limit of 1,000,000 cells".to_string())
 }
 
-fn check(left: &Path, right: &Path) -> Result<bool, String> {
-    let (different, summary) = summarize(&load_comparison(left, right)?);
+fn check(left: &Path, right: &Path, json: bool) -> Result<bool, String> {
+    let comparison = load_comparison(left, right)?;
+    let (different, summary) = if json {
+        summarize_json(&comparison)
+    } else {
+        summarize(&comparison)
+    };
     io::stdout()
         .lock()
         .write_all(summary.as_bytes())

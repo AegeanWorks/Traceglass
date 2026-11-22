@@ -1,13 +1,13 @@
 {
   "version": 1,
   "active_task": {
-    "task_id": "source-lines",
+    "task_id": "json-check",
     "last_phase": "phase 4",
-    "active_phase": 5,
-    "status": "completed",
-    "updated_at": 1795351423.6745257,
+    "active_phase": 4,
+    "status": "in_progress",
+    "updated_at": 1795351744.718464,
     "owner": "codex:traceglass",
-    "lease_until": 1795358623.6745257,
+    "lease_until": 1795358944.718464,
     "started_by": "codex:traceglass",
     "continuations": [],
     "workspaces": [
@@ -15,98 +15,9 @@
         "name": "traceglass",
         "path": "projects/traceglass"
       }
-    ],
-    "completed_at": 1795351460.9670255,
-    "completed_head": "7d0386dbd421cd672417dbddae59df8a6cc834b0",
-    "completed_tree": "1b8af727383774b5a5c63129f033c4437008cdf2"
+    ]
   },
   "checkpoints": [
-    {
-      "task_id": "build",
-      "phase": "phase 3",
-      "phase_num": 3,
-      "description": "Added pure navigation state machine, bounded input adapter and tests; seven tests pass with GNU Rust",
-      "files_affected": [
-        ".aikit/decisions.md",
-        ".aikit/guidelines.md",
-        ".aikit/project.json",
-        ".aikit/task_ledger.json",
-        ".gitignore",
-        "README.md",
-        "demo.py",
-        "inventory.py",
-        ".aikit/media.json",
-        ".aikit/ui.json",
-        "Cargo.lock",
-        "Cargo.toml",
-        "assets/logo.svg",
-        "assets/social-preview.svg",
-        "reports/aikit-observations.md",
-        "reports/architecture-audit.md",
-        "src/input.rs",
-        "src/lib.rs",
-        "tests/comparison.rs",
-        "tests/input.rs"
-      ],
-      "status": "in_progress",
-      "timestamp": 1795346553.889601,
-      "timestamp_str": "2026-11-22 14:22:33",
-      "agent": "codex:traceglass",
-      "handoff": {
-        "next": "complete Rust compatibility demo, terminal UI and audit after AIKit UI baseline and hygiene gates become available",
-        "open": "concurrent AIKit gate changes and stale native DLL"
-      },
-      "workspaces": [
-        {
-          "name": "traceglass",
-          "path": "projects/traceglass"
-        }
-      ]
-    },
-    {
-      "task_id": "build",
-      "phase": "phase 3",
-      "phase_num": 3,
-      "description": "Added bounded event-name alignment and connected navigation; eleven Rust tests pass; Sextant overlap assessed",
-      "files_affected": [
-        ".aikit/decisions.md",
-        ".aikit/guidelines.md",
-        ".aikit/project.json",
-        ".aikit/task_ledger.json",
-        ".gitignore",
-        "README.md",
-        "demo.py",
-        "inventory.py",
-        ".aikit/media.json",
-        ".aikit/ui.json",
-        "Cargo.lock",
-        "Cargo.toml",
-        "assets/logo.svg",
-        "assets/social-preview.svg",
-        "reports/aikit-observations.md",
-        "reports/architecture-audit.md",
-        "src/alignment.rs",
-        "src/input.rs",
-        "src/lib.rs",
-        "tests/alignment.rs",
-        "tests/comparison.rs",
-        "tests/input.rs"
-      ],
-      "status": "in_progress",
-      "timestamp": 1795346695.271558,
-      "timestamp_str": "2026-11-22 14:24:55",
-      "agent": "codex:traceglass",
-      "handoff": {
-        "next": "implement terminal UI and Rust compatibility demo after UI contract baseline and AIKit gate support",
-        "open": "AIKit root files changing concurrently"
-      },
-      "workspaces": [
-        {
-          "name": "traceglass",
-          "path": "projects/traceglass"
-        }
-      ]
-    },
     {
       "task_id": "build",
       "phase": "phase 4",
@@ -555,6 +466,59 @@
         ],
         "forced": false
       }
+    },
+    {
+      "task_id": "json-check",
+      "phase": "phase 2",
+      "phase_num": 2,
+      "description": "[1/1] Add versioned JSON output to non-interactive checks with source locations",
+      "files_affected": [],
+      "status": "in_progress",
+      "timestamp": 1795351519.4305866,
+      "timestamp_str": "2026-11-22 15:45:19",
+      "agent": "codex:traceglass",
+      "impact_assessment": {
+        "why": "CI integrations need stable structured results and original locations without parsing prose",
+        "benefits": "Reliable machine-readable summary while retaining existing output and exit codes",
+        "risks": "contract: schema stability and null positions; dependency: none; concurrency: existing snapshot semantics; state: mismatch between formats",
+        "mitigation": "Version the schema, derive both formats from the same comparison, test equal, insertions and error paths"
+      },
+      "plan_digest": "0f4be6e7406093784f6df5e92114334b26f93b8de6d9cd9fcbcec87cad791cad",
+      "workspaces": [
+        {
+          "name": "traceglass",
+          "path": "projects/traceglass"
+        }
+      ]
+    },
+    {
+      "task_id": "json-check",
+      "phase": "phase 4",
+      "phase_num": 4,
+      "description": "Versioned JSON checked with real parser, regression tests and all project gates",
+      "files_affected": [
+        ".aikit/decisions.md",
+        ".aikit/task_ledger.json",
+        ".aikit/task_ledger_archive.jsonl",
+        ".aikit/ui_history.json",
+        "README.md",
+        "reports/architecture-audit.md",
+        "src/main.rs",
+        "src/ui.rs",
+        "tests/cli.rs",
+        "tests/ui.rs"
+      ],
+      "status": "in_progress",
+      "timestamp": 1795351744.718464,
+      "timestamp_str": "2026-11-22 15:49:04",
+      "agent": "codex:traceglass",
+      "checklists": "passed",
+      "workspaces": [
+        {
+          "name": "traceglass",
+          "path": "projects/traceglass"
+        }
+      ]
     }
   ]
 }
