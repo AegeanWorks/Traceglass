@@ -3,8 +3,8 @@
   "active_task": {
     "task_id": "json-check",
     "last_phase": "phase 4",
-    "active_phase": 4,
-    "status": "in_progress",
+    "active_phase": 5,
+    "status": "completed",
     "updated_at": 1795351744.718464,
     "owner": "codex:traceglass",
     "lease_until": 1795358944.718464,
@@ -15,53 +15,12 @@
         "name": "traceglass",
         "path": "projects/traceglass"
       }
-    ]
+    ],
+    "completed_at": 1795351771.8258421,
+    "completed_head": "b1c8d5a87f26d5dff70eddb7898f0be755baf198",
+    "completed_tree": "b7ecca78adf11dd5ee1a76edd712e44e8899b0b8"
   },
   "checkpoints": [
-    {
-      "task_id": "build",
-      "phase": "phase 4",
-      "phase_num": 4,
-      "description": "Core and Rust compatibility demo: project gates passed; UI remains next milestone",
-      "files_affected": [
-        ".aikit/compat.json",
-        ".aikit/decisions.md",
-        ".aikit/guidelines.md",
-        ".aikit/project.json",
-        ".aikit/task_ledger.json",
-        ".gitignore",
-        "README.md",
-        "demo.py",
-        "inventory.py",
-        ".aikit/media.json",
-        ".aikit/ui.json",
-        "Cargo.lock",
-        "Cargo.toml",
-        "assets/logo.svg",
-        "assets/social-preview.svg",
-        "reports/aikit-observations.md",
-        "reports/architecture-audit.md",
-        "src/alignment.rs",
-        "src/input.rs",
-        "src/lib.rs",
-        "src/main.rs",
-        "tests/alignment.rs",
-        "tests/comparison.rs",
-        "tests/compat.rs",
-        "tests/input.rs"
-      ],
-      "status": "in_progress",
-      "timestamp": 1795346825.8485322,
-      "timestamp_str": "2026-11-22 14:27:05",
-      "agent": "codex:traceglass",
-      "checklists": "passed",
-      "workspaces": [
-        {
-          "name": "traceglass",
-          "path": "projects/traceglass"
-        }
-      ]
-    },
     {
       "task_id": "build",
       "phase": "phase 3",
@@ -519,6 +478,23 @@
           "path": "projects/traceglass"
         }
       ]
+    },
+    {
+      "task_id": "json-check",
+      "phase": "completed",
+      "phase_num": 5,
+      "description": "Task 'json-check' completed successfully.",
+      "status": "completed",
+      "timestamp": 1795351771.8866007,
+      "timestamp_str": "2026-11-22 15:49:31",
+      "agent": "codex:traceglass",
+      "head": "b1c8d5a87f26d5dff70eddb7898f0be755baf198",
+      "delivery": {
+        "roots": [
+          "."
+        ],
+        "forced": false
+      }
     }
   ]
 }
